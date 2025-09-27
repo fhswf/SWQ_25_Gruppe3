@@ -1,5 +1,25 @@
 # Teilnehmer: XXXX und FARN
 
+<#
+    Anmerkungen FARN
+- Sehr wenige Kommentare
+- Bildung der task_id kritisch, weil nicht eindeutig
+- Möglichkeit, id von außen mitzugeben, ist ungünstig
+- Realisierung der Entität task als Liste ist intransparent und umständlich
+
+- die Funktion process_tasks ist sehr schwer nachzuvollziehen. Was soll sie leisten?
+durch das TODO ist auch unklar, ob sie überhaupt schon fertig.
+
+- undurchsichtige Funktionsnamen. Was machen die Funktionen überhaupt?
+- wofür wird die Variable backup_tasks benötigt? Sie wird deklariert und das Dictionary wird auch gefüllt, aber niemals geleert oder abgefragt
+- Jeder Task, wird demselben "User" zugewiesen; warum?
+- die Funktion mark_done arbeitet - warum auch immer - anhand des Tasknamens und nicht anhand der id. Der Name muss nicht eindeutig sein. Im Zweifel werden hier zu viele Tasks als erledigt markiert.
+- Welchen Mehrwert, hat der Rückgabewert der mark_done-Funktion? 
+- Die Zuordnung der Status findet nur im print-Statement der Funktion show_tasks statt. Was, wenn andere/künftige Funktionen die Status auch auflösen müssen?
+- Welchen Zweck hat die Funktion calculate_task_average? Schlecht dokumentiert. Wird hier tatsächlich die "durchschnittliche Task-ID" berechnet? Welchen Nutzen hat das?
+- 
+#>
+
 import datetime
 import random
 
