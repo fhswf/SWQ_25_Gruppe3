@@ -1,6 +1,7 @@
 # Teilnehmer: XXXX und FARN
 
 '''
+    A1
 
     Anmerkungen FARN
     - Sehr wenige Kommentare
@@ -66,8 +67,40 @@
     - einmalige Benutzung von #TODO
         - einerseits ist an der Stelle des Vorkommens nicht klar, worin das todo noch besteht
         - andererseits wirkt das als wäre der Rest des Codes fertig, was weitere Fragen aufwirft, 
-    '''
+    
 
+    A2
+
+    Negativ zu bewertende Aspekt
+        - Funktionalität
+            - Ohne die Spezifikation zu kennen, kann davon ausgegangen werden, dass
+            viele Funktionen nicht so arbeiten, wie sie sollten.
+            - So kann nicht sinnvoll gewollt sein, dass alle Todos mit demselben Namen
+            mit einem Schritt auf erledigt gesetzt werden
+            - ein weiteres Beispiel ist die "Filterung" der kommenden Task anhand des Datum,
+            das als String formatiert ist. 
+        - Zuverlässigkeit / Robustheit
+            - das System ist fehleranfällig
+            - es gibt keinerlei Ausnahmebehandlungen, welche sich anbieten würden, alleine weil
+            es z.B. bei Erstellung von tasks Eingaben von außen geben kann
+            - so gibt es bspw. die Funktion calculate_ask_average. Wenngleich deren Sinn sich nicht erschließt,
+            funktioniert sie nicht zuverlässig, weil taks_ids auch nicht numerisch sein können
+
+        Verständlichkeit, Struktur, Transparenz
+        - positiv zu bemerken ist, dass die Funktionsnamen grundsätzlich sprechend benannt sind,
+        auch wenn sie nicht immer das machen, was sie vorgeben zu tun
+        - ebenfalls positiv zu bemerken ist, dass es eine Gliederung in Funktionen gibt
+        - es mangelt an Verständlichkeit einerseits augrund von fehlenden Kommentaren,
+        andererseits aufgrund von umständlichen Strukturen. Hier ist noch einmal die Implementierung
+        eines Tasks als Liste zu nennen. Nur durch lesen des Codes kann man erahnen, welche Taskeigenschaft
+        unter welchem Index zu finden ist. Wenn man dies durchschaut hat, muss man es sich nur noch merken können.
+        Eine Klasse könnte hier helfen
+
+        Wartbarkeit
+        - die Wartbarkeit ist mangelhaft. Der gesamte Quelltext muss angepasst werden,
+        wenn sie die Struktur eines tasks ändert. 
+        - auch hier könnte ein objektorientierter Ansatz helfen
+    '''
 import datetime
 import random
 
