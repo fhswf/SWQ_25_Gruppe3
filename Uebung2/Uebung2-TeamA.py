@@ -1,24 +1,72 @@
 # Teilnehmer: XXXX und FARN
 
-<#
+'''
+
     Anmerkungen FARN
-- Sehr wenige Kommentare
-- Bildung der task_id kritisch, weil nicht eindeutig
-- Möglichkeit, id von außen mitzugeben, ist ungünstig
-- Realisierung der Entität task als Liste ist intransparent und umständlich
+    - Sehr wenige Kommentare
+    - Bildung der task_id kritisch, weil nicht eindeutig
+    - Möglichkeit, id von außen mitzugeben, ist ungünstig
+    - Realisierung der Entität task als Liste ist intransparent und umständlich
 
-- die Funktion process_tasks ist sehr schwer nachzuvollziehen. Was soll sie leisten?
-durch das TODO ist auch unklar, ob sie überhaupt schon fertig.
+    - die Funktion process_tasks ist sehr schwer nachzuvollziehen. Was soll sie leisten?
+    durch das TODO ist auch unklar, ob sie überhaupt schon fertig.
 
-- undurchsichtige Funktionsnamen. Was machen die Funktionen überhaupt?
-- wofür wird die Variable backup_tasks benötigt? Sie wird deklariert und das Dictionary wird auch gefüllt, aber niemals geleert oder abgefragt
-- Jeder Task, wird demselben "User" zugewiesen; warum?
-- die Funktion mark_done arbeitet - warum auch immer - anhand des Tasknamens und nicht anhand der id. Der Name muss nicht eindeutig sein. Im Zweifel werden hier zu viele Tasks als erledigt markiert.
-- Welchen Mehrwert, hat der Rückgabewert der mark_done-Funktion? 
-- Die Zuordnung der Status findet nur im print-Statement der Funktion show_tasks statt. Was, wenn andere/künftige Funktionen die Status auch auflösen müssen?
-- Welchen Zweck hat die Funktion calculate_task_average? Schlecht dokumentiert. Wird hier tatsächlich die "durchschnittliche Task-ID" berechnet? Welchen Nutzen hat das?
-- 
-#>
+    - undurchsichtige Funktionsnamen. Was machen die Funktionen überhaupt?
+    - wofür wird die Variable backup_tasks benötigt? Sie wird deklariert und das Dictionary wird auch gefüllt, aber niemals geleert oder abgefragt
+    - Jeder Task, wird demselben "User" zugewiesen; warum?
+    - die Funktion mark_done arbeitet - warum auch immer - anhand des Tasknamens und nicht anhand der id. Der Name muss nicht eindeutig sein. Im Zweifel werden hier zu viele Tasks als erledigt markiert.
+    - Welchen Mehrwert, hat der Rückgabewert der mark_done-Funktion?
+    - Die Zuordnung der Status findet nur im print-Statement der Funktion show_tasks statt. Was, wenn andere/künftige Funktionen die Status auch auflösen müssen?
+    - Welchen Zweck hat die Funktion calculate_task_average? Schlecht dokumentiert. Wird hier tatsächlich die "durchschnittliche Task-ID" berechnet? Welchen Nutzen hat das?
+-
+    Was macht der Code?
+    1) add_task
+       - erstellt einen Task, der als Liste gespeichert wird. Die "Attribute" des Tasks sind in einer bestimmten Reihenfolge in einer Liste gespeichert
+       - bildet eine task_id, wenn keine von außen mitgegeben wurde,
+       - die Werte unter den Indizes, die offenber für "erledigt" und den Benutzer stehen, werden standardmäßig vorbelegt mit False und "user1"
+       - die Liste/der Task wird im dict tasks und backup_tasks gespeichert, wobei die task_id als Schlüssel fungiert
+       - die task_id wird zurückgegeben
+
+    2) remove_task
+        - etnfernt den task anhand der id den task aus dem task-dict
+        - gibt True zurück, wenn task enthalten war und gelöscht wurde, ansonsten false
+
+    3) mark_done
+        - der zu markierende Task wird anhand des Namens identifiziert
+        - iteriert über jedes Element des task_dict und macht dann für jede Liste Folgendes
+            - wenn der erste Eintrag der Liste mir dem Namen übereinstimmt, wird der vierte Eintrag der Liste auf True gesetzt
+        - gibt immer "Erledigt" zurück
+    4) show_tasks
+        - iteriert über das tasks-dict
+        - gibt für jedes Element einen f-String aus
+        - innerhalb der Ausgabe wird noch entschieden, wie die numerischen Status aufgelöst werden
+    5) process_tasks
+        - negiert für einen beliebigen task im task_dict den Wert unter Index 3 (Status)
+        - damit wird ein beliebiger Task von offen auf erledigt oder anders herum gesetzt
+        - gibt False zurück
+    6) calculate_task_avergae
+        - berechnet die durchschnittliche task_id und gibt diese zurück
+    7) upcoming_tasks
+        - gibt eine Liste an Tasks, sortiert nach Namen zurück, deren Fälligkeitsdatum größer oder gleich heute ist.
+            Der Datumsvergleich passiert aber lexikografisch
+    8) clean_up()
+        - legt ein neues dict namens temp an
+        - iteriert über das task_dict und prüft für jeden task, ob er unter index 3 False gespeichert hat (Offene Fälle)
+            - wenn das der Fall ist, wird der Fall in das neue dict geschrieben
+        - das ursprüngliche taks_dict wird geleert
+        - das task_dict wird allen Einträgen aus temp wieder gefüllt 
+    9) get_task_count()
+        - gibt die Anzahl an Elementen im task_dict zurück
+        - das passiert indem per Iteration über das dict für jedes Element 1 zurückgegeben wird und diese aufsummiert werden
+
+    Welche Stellen machen den Code unverständlich?
+
+    - Zu wenig und mangelhafte Kommentare
+    - unpassende Datentypen, z.B. ein task als Liste
+    - einmalige Benutzung von #TODO
+        - einerseits ist an der Stelle des Vorkommens nicht klar, worin das todo noch besteht
+        - andererseits wirkt das als wäre der Rest des Codes fertig, was weitere Fragen aufwirft, 
+    '''
 
 import datetime
 import random
@@ -108,6 +156,8 @@ add_task("Projekt abschließen", "25-05-2025", 1)
 add_task("Einkaufen gehen", "21-05-2025", 3)
 add_task("Dokumentation schreiben", "30-05-2025", 2)
 mark_done("Einkaufen gehen")
+show_tasks()
+print("___________________")
 process_tasks()
 show_tasks()
 print("Offene Aufgaben nach Datum sortiert:", upcoming_tasks())
