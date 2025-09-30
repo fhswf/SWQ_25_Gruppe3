@@ -105,8 +105,8 @@ import datetime
 import random
 import uuid
 
-tasks = None
-backup_tasks = {}
+# tasks = None
+# backup_tasks = {}; Nutzen erschließt sich nicht
 
 
 class Task:
@@ -187,10 +187,90 @@ class Task:
 
     def __str__(self):
         return f"""
-        Aufgabe {self.name} ist fällig am {datetime.datetime.strftime(self.due_date,Task.format_code)} 
+        Aufgabe {self.name} mit {str(self.id)} ist fällig am {datetime.datetime.strftime(self.due_date,Task.format_code)} 
         und mit Priortät  {Task.priorities[self.priority]} zu behandeln.\n
         """
 
+
+class TaskList:
+    """ Klasse, die Aufgaben sammelt"""
+
+    def __init__(self):
+        """
+            Instanziiert Taskliste und erstellt leeres dict self.tasks
+        """
+        self.tasks = {}
+
+    def add_task(self, task: Task):
+        """
+            Fügt einen Task hinzu
+            Args:
+                task: Aufgabe, die hinzugefügt werden soll
+            Returns:
+                None
+        """
+        self.tasks[str(task.id)] = task
+
+    def get_task_count(self):
+        """
+            Gibt die Anzahl der noch zu erledigenden Aufgaben zurück
+            Args:
+                None
+            Returns:
+                Anzahl der noch zu erledigenden Aufgaben als int    
+        """
+        return len([task for task in self.tasks.values() if not task.done])
+
+    def print_task_list(self, done=None):
+        """
+            Druckt die Taskliste je nach mode komplett oder nur erledigte/nicht erledigte
+            Args:
+                done: None, True or False
+            Returns:
+                None
+            Raises:
+                ValueError, wenn done weder None noch boolean
+        """
+        if done is None:
+            print("Gesamte Aufgabenliste")
+            for task in self.tasks:
+                print(task)
+        elif isinstance(done, bool):
+            for task in self.tasks:
+                if task.done == done:
+                    print(task)
+        else:
+            raise (ValueError)
+
+    def remove_task(self, task_id):
+        """
+            Löscht einen Task anhand seiner ID
+            Args:
+                task_id
+            Returns:
+                None
+        """
+        del self.tasks[task_id]
+
+    def mark_task_as_done(self,task_id):
+        """
+            Markiert eine Aufgabe der Liste als erledigt
+            Args:
+                task_id
+            Return:
+                None
+            Raises:
+                IndexError, wenn task_id nicht gefunden
+        """
+        if task_id in self.tasks:
+            self.tasks[task_id].set_done()
+        else:
+            raise(IndexError)
+        
+    def __str__(self):
+        return " ".join([task.__str__() for task in self.tasks.values()])
+
+aufgabenliste = TaskList()
 
 def add_task(name, due_date, priority=3, task_id=None):
     global tasks, backup_tasks
@@ -268,6 +348,7 @@ def get_task_count():
     return sum(1 for _ in tasks) if tasks else 0
 
 
+
 '''add_task("Projekt abschließen", "25-05-2025", 1, task_id="hello")
 add_task("Projekt abschließen", "25-05-2025", 1)
 add_task("Einkaufen gehen", "21-05-2025", 3)
@@ -281,8 +362,10 @@ print("Offene Aufgaben nach Datum sortiert:", upcoming_tasks())
 cleanup()
 print("Gesamtzahl der Aufgaben:", get_task_count())
 '''
-tasks = []
-tasks.append(Task("Unikram", "27.10.2025", 2))
-tasks.append(Task("Unikram", "test", 47))
-for task in tasks:
-    print(task)
+
+aufgabenliste = TaskList()
+print(Task("Unikram", "27.10.2025", 2))
+print(Task("Unikram", "test", 47))
+aufgabenliste.add_task(Task("Unikram", "27.10.2025", 2))
+aufgabenliste.add_task(Task("Unikram", "test", 47))
+print(aufgabenliste)
