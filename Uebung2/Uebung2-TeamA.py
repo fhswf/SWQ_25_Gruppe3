@@ -1,4 +1,4 @@
-# Teilnehmer: XXXX und FARN
+# Teilnehmer: DLWG und FARN
 
 '''
     A1
@@ -103,9 +103,93 @@
     '''
 import datetime
 import random
+import uuid
 
 tasks = None
 backup_tasks = {}
+
+
+class Task:
+    """ Klasse, die eine Aufgabe repräsentiert """
+    priorities = {
+        1: "niedrig",
+        2: "mittel",
+        3: "hoch"
+    }
+    format_code = "%d.%m.%Y"
+    default_date = "31.12.9999"
+    default_priority = 1
+
+    def __init__(self, name=None, due_date=None, priority=None):
+        """ 
+            Instanziiert eine neue Aufgabe
+            Args:
+                name: Name der Aufgabe
+                due_date: Fälligkeitsdatum als String; falls nicht angegeben, wird default_date der Klasse herangezogen
+                priority: Dringlichkeit der Aufgabe; falls nicht angegeben oder unbekannt, wird default_priority gesetzt
+            returns:
+                None
+        """
+        self.id = uuid.uuid4()
+        if name is None:
+            self.name = "Platzhalter"
+        else:
+            self.name = name
+
+        self.done = False
+        self.set_due_date(due_date)
+        if priority is None:
+            self.set_priority(1)
+        else:
+            self.set_priority(priority)
+
+    def set_done(self):
+        """ 
+            Setzt Aufgabe als erledigt
+            Args:
+                None
+            Returns:
+                None
+        """
+        self.done = True
+
+    def set_priority(self, priority):
+        """
+            Ändern Priorität der Aufgabe, falls Priorität bekannt
+            Args:
+                priority: Neue Priorität
+            Returns:
+                None
+        """
+        if priority in Task.priorities:
+            self.priority = priority
+        else:
+            self.priority = Task.default_priority
+
+    def set_due_date(self, due_date=None):
+        """
+            Ändern des Fälligkeitsdatums
+            Args:
+                due_date: Neues Fälligkeitsdatum
+            Returns:
+                None
+
+        """
+        # Wenn due_date nicht gesetzt oder nicht zu datetime umwandelbar, default_date setzen
+        if due_date is None:
+            due_date = Task.default_date
+        try:
+            self.due_date = datetime.datetime.strptime(
+                due_date, Task.format_code)
+        except (ValueError, TypeError):
+            self.due_date = datetime.datetime.strptime(
+                Task.default_date, Task.format_code)
+
+    def __str__(self):
+        return f"""
+        Aufgabe {self.name} ist fällig am {datetime.datetime.strftime(self.due_date,Task.format_code)} 
+        und mit Priortät  {Task.priorities[self.priority]} zu behandeln.\n
+        """
 
 
 def add_task(name, due_date, priority=3, task_id=None):
@@ -184,7 +268,7 @@ def get_task_count():
     return sum(1 for _ in tasks) if tasks else 0
 
 
-add_task("Projekt abschließen", "25-05-2025", 1, task_id="hello")
+'''add_task("Projekt abschließen", "25-05-2025", 1, task_id="hello")
 add_task("Projekt abschließen", "25-05-2025", 1)
 add_task("Einkaufen gehen", "21-05-2025", 3)
 add_task("Dokumentation schreiben", "30-05-2025", 2)
@@ -196,3 +280,9 @@ show_tasks()
 print("Offene Aufgaben nach Datum sortiert:", upcoming_tasks())
 cleanup()
 print("Gesamtzahl der Aufgaben:", get_task_count())
+'''
+tasks = []
+tasks.append(Task("Unikram", "27.10.2025", 2))
+tasks.append(Task("Unikram", "test", 47))
+for task in tasks:
+    print(task)
