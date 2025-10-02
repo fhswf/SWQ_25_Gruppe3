@@ -187,7 +187,7 @@ class Task:
 
     def __str__(self):
         return f"""
-        Aufgabe {self.name} mit {str(self.id)} ist fällig am {datetime.datetime.strftime(self.due_date,Task.format_code)}
+        [{'x' if self.done else ' '}] Aufgabe {self.name} mit {str(self.id)} ist fällig am {datetime.datetime.strftime(self.due_date,Task.format_code)}
         und mit Priortät  {Task.priorities[self.priority]} zu behandeln.\n
         """
 
@@ -273,7 +273,7 @@ class TaskList:
             Markiert eine Aufgabe der Liste als erledigt
             Args:
                 task_id
-            Return:
+            Returns:
                 None
             Raises:
                 KeyError, wenn task.id nicht gefunden
@@ -282,6 +282,18 @@ class TaskList:
             self.tasks[task.id].set_done()
         else:
             raise (KeyError("Aufgabe nicht in Liste"))
+
+    def del_finished_tasks(self):
+        """
+            Entfernt Aufgaben aus der Liste, die als erledigt markiert sind
+            Args:
+                None
+            Returns:
+                None
+        """
+        for key in list(self.tasks.keys()):
+            if self.tasks[key].done:
+                del self.tasks[key]
 
     def __str__(self):
         return " ".join([task.__str__() for task in self.tasks.values()])
@@ -331,6 +343,7 @@ def show_tasks():
             f"{task_id}: {task[0]} ({task[2]}) - bis {task[1]} - {'Erledigt' if task[3] else 'Offen'}")
 '''
 
+
 def process_tasks():
     rand_id = random.choice(list(tasks.keys()))
     tasks[rand_id][3] = not tasks[rand_id][3]
@@ -353,6 +366,7 @@ def upcoming_tasks():
     return upcoming
 
 
+'''
 def cleanup():
     global tasks
     temp = {}
@@ -363,6 +377,7 @@ def cleanup():
         return
     tasks.clear()
     tasks.update(temp)
+'''
 
 
 def get_task_count():
@@ -394,4 +409,15 @@ aufgabenliste.print_task_list()
 # aufgabenliste.remove_task(aufg1)
 aufgabenliste.print_task_list(done=False)
 aufgabenliste.mark_task_as_done(aufg2)
+aufgabenliste.print_task_list()
+aufg3 = Task("Weihnachten", "11.12.2025", "Test")
+aufgabenliste.add_task(aufg3)
+print("alle Tasks")
+aufgabenliste.print_task_list()
+print("nur offene")
 aufgabenliste.print_task_list(done=False)
+print("nur erledigte")
+aufgabenliste.print_task_list(done=True)
+aufgabenliste.del_finished_tasks()
+print("Nach cleanup")
+aufgabenliste.print_task_list()
