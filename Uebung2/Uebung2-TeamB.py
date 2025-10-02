@@ -1,5 +1,39 @@
 # Teilnehmer: RNSR und ANGE
 
+"""
+Aufgabe 1:
+Verständnisprobleme im Code:
+- `tasks` und `backup_tasks` sollten gleich initialisiert werden, um Fehler zu vermeiden. (None vs dict)
+- Was ist der Sinn hinter backup_tasks? Es wird nie verwendet.
+- Wieso sind `tasks` und `backup_tasks` globale Variablen? Wäre es nicht besser, sie als Parameter zu übergeben oder in einer Klasse zu kapseln?
+
+- `add_task`:
+- Ein `task` sollte eine eigene Datenstruktur sein und keine Liste mit verschiedenen Attributen. Wieso wurde sich dafür entschieden?
+- `task_id` wird zufällig berechnet (len(tasks) + random.randint), Kollisionen möglich bei einem Bereich von 2 bis 7. Besser UUID verwenden. Wieso sollte dies nicht verändert werden? (Kommentar)
+- `task_id` kann vom Benutzer gesetzt werden, was zu einem anderem Datentyp führen kann (string vs int).
+
+- `mark_done`: 
+- Wieso hat `mark_done` keinen Rückgabewert, wenn die Aufgabe nicht gefunden wird? Bzw. wieso wird kein Boolean zurückgegeben wie bei `remove_task`?
+
+- `process_tasks`:
+- Wieso hat `process_tasks` False als festen Rückgabewert und ein `# TODO` Kommentar?
+- Soll `process_tasks` eine zufällige Aufgabe markieren/unmarkieren? Wieso? 
+
+- `calculate_task_average`:
+- `calculate_task_average` berechnet den Durchschnitt der task_ids, was wenig Sinn ergibt. Vielleicht sollte es die durchschnittliche Priorität sein?
+- Namen der Funktion ist irreführend bzw. nicht sprechend
+
+- `upcoming_tasks`:
+- `upcoming_tasks` sortiert nach Name und nicht nach Datum, was sinnvoller wäre. Desweiteren wäre ein Parameter für ASC bzw. DESC sinnvoll.
+- Die Ausgabe ist auch eine komplett andere als bei `show_tasks`. Wieso?
+
+- `cleanup`:
+- Wieso ist `cleanup` so komplex geschrieben? Es ist kein temp dict notwendig
+
+- `get_task_count`:
+- `get_task_count` könnte einfach `len(tasks)` zurückgeben. Wieso so kompliziert?
+
+"""
 
 import datetime
 import random
