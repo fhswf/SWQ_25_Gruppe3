@@ -195,3 +195,33 @@ if __name__ == "__main__":
     manager.cleanup()
 
     print("Gesamtzahl der Aufgaben:", manager.get_task_count())
+
+
+"""
+************* Module Uebung2-TeamB
+Uebung2/Uebung2-TeamB.py:6:0: C0301: Line too long (104/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:8:0: C0301: Line too long (144/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:11:0: C0301: Line too long (132/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:12:0: C0301: Line too long (194/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:13:0: C0301: Line too long (104/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:16:0: C0301: Line too long (148/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:23:0: C0301: Line too long (149/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:27:0: C0301: Line too long (139/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:54:0: C0301: Line too long (103/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:59:0: C0301: Line too long (115/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:60:0: C0301: Line too long (112/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:77:0: C0301: Line too long (124/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:91:0: C0301: Line too long (101/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:98:0: C0301: Line too long (103/100) (line-too-long)
+Uebung2/Uebung2-TeamB.py:1:0: C0103: Module name "Uebung2-TeamB" doesn't conform to snake_case naming style (invalid-name)
+Uebung2/Uebung2-TeamB.py:39:0: W0105: String statement has no effect (pointless-string-statement)
+Uebung2/Uebung2-TeamB.py:72:0: C0413: Import "import uuid" should be placed at the top of the module (wrong-import-position)
+Uebung2/Uebung2-TeamB.py:73:0: C0413: Import "import datetime" should be placed at the top of the module (wrong-import-position)
+Uebung2/Uebung2-TeamB.py:76:0: C0115: Missing class docstring (missing-class-docstring)
+Uebung2/Uebung2-TeamB.py:77:4: R0913: Too many arguments (6/5) (too-many-arguments)
+Uebung2/Uebung2-TeamB.py:86:4: C0116: Missing function or method docstring (missing-function-docstring)
+Uebung2/Uebung2-TeamB.py:94:0: C0115: Missing class docstring (missing-class-docstring)
+
+-----------------------------------
+Your code has been rated at 7.18/10
+"""
