@@ -363,7 +363,7 @@ def show_tasks():
             f"{task_id}: {task[0]} ({task[2]}) - bis {task[1]} - {'Erledigt' if task[3] else 'Offen'}")
 '''
 
-
+'''
 def process_tasks():
     rand_id = random.choice(list(tasks.keys()))
     tasks[rand_id][3] = not tasks[rand_id][3]
@@ -376,7 +376,7 @@ def calculate_task_average():
     avg = total / len(tasks) if tasks else 0
     return avg
 
-
+'''
 '''
 def upcoming_tasks():
     today = datetime.datetime.now().strftime("%d-%m-%Y")
