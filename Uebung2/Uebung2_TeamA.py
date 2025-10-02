@@ -13,19 +13,28 @@
     durch das TODO ist auch unklar, ob sie überhaupt schon fertig.
 
     - undurchsichtige Funktionsnamen. Was machen die Funktionen überhaupt?
-    - wofür wird die Variable backup_tasks benötigt? Sie wird deklariert und das Dictionary wird auch gefüllt, aber niemals geleert oder abgefragt
+    - wofür wird die Variable backup_tasks benötigt? Sie wird deklariert und das Dictionary 
+        wird auch gefüllt, aber niemals geleert oder abgefragt
     - Jeder Task, wird demselben "User" zugewiesen; warum?
-    - die Funktion mark_done arbeitet - warum auch immer - anhand des Tasknamens und nicht anhand der id. Der Name muss nicht eindeutig sein. Im Zweifel werden hier zu viele Tasks als erledigt markiert.
+    - die Funktion mark_done arbeitet - warum auch immer - anhand des Tasknamens 
+        und nicht anhand der id. Der Name muss nicht eindeutig sein. 
+        Im Zweifel werden hier zu viele Tasks als erledigt markiert.
     - Welchen Mehrwert, hat der Rückgabewert der mark_done-Funktion?
-    - Die Zuordnung der Status findet nur im print-Statement der Funktion show_tasks statt. Was, wenn andere/künftige Funktionen die Status auch auflösen müssen?
-    - Welchen Zweck hat die Funktion calculate_task_average? Schlecht dokumentiert. Wird hier tatsächlich die "durchschnittliche Task-ID" berechnet? Welchen Nutzen hat das?
+    - Die Zuordnung der Status findet nur im print-Statement der Funktion show_tasks statt. 
+        Was, wenn andere/künftige Funktionen die Status auch auflösen müssen?
+    - Welchen Zweck hat die Funktion calculate_task_average? Schlecht dokumentiert. 
+        Wird hier tatsächlich die "durchschnittliche Task-ID" berechnet? Welchen Nutzen hat das?
 -
     Was macht der Code?
     1) add_task
-       - erstellt einen Task, der als Liste gespeichert wird. Die "Attribute" des Tasks sind in einer bestimmten Reihenfolge in einer Liste gespeichert
+       - erstellt einen Task, der als Liste gespeichert wird. 
+            Die "Attribute" des Tasks sind in einer bestimmten Reihenfolge 
+            in einer Liste gespeichert
        - bildet eine task_id, wenn keine von außen mitgegeben wurde,
-       - die Werte unter den Indizes, die offenber für "erledigt" und den Benutzer stehen, werden standardmäßig vorbelegt mit False und "user1"
-       - die Liste/der Task wird im dict tasks und backup_tasks gespeichert, wobei die task_id als Schlüssel fungiert
+       - die Werte unter den Indizes, die offenber für "erledigt" und den Benutzer stehen, 
+            werden standardmäßig vorbelegt mit False und "user1"
+       - die Liste/der Task wird im dict tasks und backup_tasks gespeichert, 
+            wobei die task_id als Schlüssel fungiert
        - die task_id wird zurückgegeben
 
     2) remove_task
@@ -35,7 +44,8 @@
     3) mark_done
         - der zu markierende Task wird anhand des Namens identifiziert
         - iteriert über jedes Element des task_dict und macht dann für jede Liste Folgendes
-            - wenn der erste Eintrag der Liste mir dem Namen übereinstimmt, wird der vierte Eintrag der Liste auf True gesetzt
+            - wenn der erste Eintrag der Liste mit dem Namen übereinstimmt, 
+                wird der vierte Eintrag der Liste auf True gesetzt
         - gibt immer "Erledigt" zurück
     4) show_tasks
         - iteriert über das tasks-dict
@@ -48,17 +58,19 @@
     6) calculate_task_avergae
         - berechnet die durchschnittliche task_id und gibt diese zurück
     7) upcoming_tasks
-        - gibt eine Liste an Tasks, sortiert nach Namen zurück, deren Fälligkeitsdatum größer oder gleich heute ist.
-            Der Datumsvergleich passiert aber lexikografisch
+        - gibt eine Liste an Tasks, sortiert nach Namen zurück, deren Fälligkeitsdatum größer oder 
+            gleich heute ist. Der Datumsvergleich passiert aber lexikografisch
     8) clean_up()
         - legt ein neues dict namens temp an
-        - iteriert über das task_dict und prüft für jeden task, ob er unter index 3 False gespeichert hat (Offene Fälle)
+        - iteriert über das task_dict und prüft für jeden task, ob er unter index 3 
+            False gespeichert hat (Offene Fälle)
             - wenn das der Fall ist, wird der Fall in das neue dict geschrieben
         - das ursprüngliche taks_dict wird geleert
         - das task_dict wird allen Einträgen aus temp wieder gefüllt
     9) get_task_count()
         - gibt die Anzahl an Elementen im task_dict zurück
-        - das passiert indem per Iteration über das dict für jedes Element 1 zurückgegeben wird und diese aufsummiert werden
+        - das passiert indem per Iteration über das dict für jedes Element 1 zurückgegeben wird 
+            und diese aufsummiert werden
 
     Welche Stellen machen den Code unverständlich?
 
@@ -83,18 +95,20 @@
             - das System ist fehleranfällig
             - es gibt keinerlei Ausnahmebehandlungen, welche sich anbieten würden, alleine weil
             es z.B. bei Erstellung von tasks Eingaben von außen geben kann
-            - so gibt es bspw. die Funktion calculate_ask_average. Wenngleich deren Sinn sich nicht erschließt,
-            funktioniert sie nicht zuverlässig, weil taks_ids auch nicht numerisch sein können
+            - so gibt es bspw. die Funktion calculate_ask_average. 
+                Wenngleich deren Sinn sich nicht erschließt, funktioniert sie nicht zuverlässig, 
+                weil taks_ids auch nicht numerisch sein können
 
         Verständlichkeit, Struktur, Transparenz
         - positiv zu bemerken ist, dass die Funktionsnamen grundsätzlich sprechend benannt sind,
         auch wenn sie nicht immer das machen, was sie vorgeben zu tun
         - ebenfalls positiv zu bemerken ist, dass es eine Gliederung in Funktionen gibt
         - es mangelt an Verständlichkeit einerseits augrund von fehlenden Kommentaren,
-        andererseits aufgrund von umständlichen Strukturen. Hier ist noch einmal die Implementierung
-        eines Tasks als Liste zu nennen. Nur durch lesen des Codes kann man erahnen, welche Taskeigenschaft
-        unter welchem Index zu finden ist. Wenn man dies durchschaut hat, muss man es sich nur noch merken können.
-        Eine Klasse könnte hier helfen
+            andererseits aufgrund von umständlichen Strukturen. Hier ist noch einmal 
+            die Implementierung eines Tasks als Liste zu nennen. Nur durch lesen des Codes 
+            kann man erahnen, welche Taskeigenschaft unter welchem Index zu finden ist. 
+            Wenn man dies durchschaut hat, muss man es sich nur noch merken können.
+            Eine Klasse könnte hier helfen
 
         Wartbarkeit
         - die Wartbarkeit ist mangelhaft. Der gesamte Quelltext muss angepasst werden,
@@ -127,8 +141,10 @@ class Task:
             Instanziiert eine neue Aufgabe
             Args:
                 name: Name der Aufgabe, falls nicht gegeben wird "Platzhalter" genutzt
-                due_date: Fälligkeitsdatum als String; falls nicht angegeben, wird default_date der Klasse herangezogen
-                priority: Dringlichkeit der Aufgabe; falls nicht angegeben oder unbekannt, wird default_priority gesetzt
+                due_date: Fälligkeitsdatum als String; falls nicht angegeben, 
+                    wird default_date der Klasse herangezogen
+                priority: Dringlichkeit der Aufgabe; falls nicht angegeben oder unbekannt, 
+                    wird default_priority gesetzt
             returns:
                 None
         """
