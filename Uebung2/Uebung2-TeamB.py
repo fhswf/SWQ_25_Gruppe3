@@ -70,6 +70,24 @@ Verbesserungsvorschläge:
 import datetime
 import random
 
+
+class Task:
+    def __init__(self, name: str, due_date: str, priority: int = 3, assigned_to: str = "user1"):
+        self.name = name
+        self.due_date = datetime.datetime.strptime(due_date, "%d-%m-%Y")
+        self.priority = priority
+        self.is_done = False
+        self.assigned_to = assigned_to
+        self.created_at = datetime.datetime.now()
+
+    def mark_done(self):
+        self.is_done = True
+
+    def __repr__(self):
+        status = "Erledigt" if self.is_done else "Offen"
+        return f"{self.name} ({self.priority}) - bis {self.due_date.strftime('%d-%m-%Y')} - {status}"
+
+        
 tasks = None
 backup_tasks = {}
 
