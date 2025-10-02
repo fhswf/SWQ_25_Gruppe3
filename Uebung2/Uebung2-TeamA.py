@@ -116,30 +116,36 @@ class Task:
         2: "mittel",
         3: "hoch"
     }
+
     format_code = "%d.%m.%Y"
     default_date = "31.12.9999"
+    default_name = "Platzhalter"
     default_priority = 1
 
     def __init__(self, name=None, due_date=None, priority=None):
         """
             Instanziiert eine neue Aufgabe
             Args:
-                name: Name der Aufgabe
+                name: Name der Aufgabe, falls nicht gegeben wird "Platzhalter" genutzt
                 due_date: Fälligkeitsdatum als String; falls nicht angegeben, wird default_date der Klasse herangezogen
                 priority: Dringlichkeit der Aufgabe; falls nicht angegeben oder unbekannt, wird default_priority gesetzt
             returns:
                 None
         """
+
+        # Aufgaben-ID als Integerdarstellung eine uuid
         self.id = int(uuid.uuid4())
         if name is None:
-            self.name = "Platzhalter"
+            self.name = Task.default_name
         else:
             self.name = name
 
+        # Aufgabe standardmäßig als "offen" anlegen
         self.done = False
         self.set_due_date(due_date)
+        # Standardprio setzen, falls nicht gegeben
         if priority is None:
-            self.set_priority(1)
+            self.set_priority(Task.default_priority)
         else:
             self.set_priority(priority)
 
@@ -168,7 +174,7 @@ class Task:
 
     def set_due_date(self, due_date=None):
         """
-            Ändern des Fälligkeitsdatums
+            Ändern des Fälligkeitsdatums; Speicherung als datetime-Objekt
             Args:
                 due_date: Neues Fälligkeitsdatum
             Returns:
@@ -203,7 +209,7 @@ class TaskList:
 
     def add_task(self, task: Task):
         """
-            Fügt einen Task hinzu
+            Fügt einen Task hinzu mit Task-ID als Key
             Args:
                 task: Aufgabe, die hinzugefügt werden soll
             Returns:
@@ -219,7 +225,7 @@ class TaskList:
             Args:
                 None
             Returns:
-                Liste mit anstehenden oder noch nicht erledinten
+                Liste mit anstehenden oder noch nicht erledigten
                 Aufgaben
         """
 
@@ -418,4 +424,3 @@ print("Offene Aufgaben nach Datum sortiert:", upcoming_tasks())
 cleanup()
 print("Gesamtzahl der Aufgaben:", get_task_count())
 '''
-
