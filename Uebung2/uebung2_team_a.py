@@ -114,9 +114,10 @@
         - die Wartbarkeit ist mangelhaft. Der gesamte Quelltext muss angepasst werden,
         wenn sie die Struktur eines tasks ändert.
         - auch hier könnte ein objektorientierter Ansatz helfen
+    
+
     '''
 import datetime
-
 import uuid
 
 # tasks = None
@@ -439,4 +440,31 @@ show_tasks()
 print("Offene Aufgaben nach Datum sortiert:", upcoming_tasks())
 cleanup()
 print("Gesamtzahl der Aufgaben:", get_task_count())
+'''
+
+'''
+
+A4
+
+uebung2_team_a.py:275:0: C0325: Unnecessary parens after 'raise' keyword (superfluous-parens)
+uebung2_team_a.py:301:0: C0325: Unnecessary parens after 'raise' keyword (superfluous-parens)
+uebung2_team_a.py:326:0: C0325: Unnecessary parens after 'raise' keyword (superfluous-parens)
+uebung2_team_a.py:385:0: C0301: Line too long (103/100) (line-too-long)
+uebung2_team_a.py:362:0: W0105: String statement has no effect (pointless-string-statement)
+uebung2_team_a.py:371:0: W0105: String statement has no effect (pointless-string-statement)
+uebung2_team_a.py:380:0: W0105: String statement has no effect (pointless-string-statement)
+uebung2_team_a.py:388:0: W0105: String statement has no effect (pointless-string-statement)
+uebung2_team_a.py:402:0: W0105: String statement has no effect (pointless-string-statement)
+uebung2_team_a.py:412:0: W0105: String statement has no effect (pointless-string-statement)
+uebung2_team_a.py:425:0: W0105: String statement has no effect (pointless-string-statement)
+uebung2_team_a.py:430:0: W0105: String statement has no effect (pointless-string-statement)
+
+-----------------------------------
+Your code has been rated at 8.52/10
+
+(superfluous-parens): Stimmen zu, denn nicht notwendige Zeichen sollte man entfernen
+                      aber VS Code scheint Leerzeichen automatisch einzufügen.
+(line-too-long): Stimmen zu, aber Länge stammt aus auskommentierten Originalcode
+(pointless-string-statement): Stimmen zu, aber welchen Effekt soll auskommentierter Code auch haben?
+Der Code wurde zur Nachvollziehbarkeit behalten
 '''
