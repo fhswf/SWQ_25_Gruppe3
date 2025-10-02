@@ -211,6 +211,26 @@ class TaskList:
         """
         self.tasks[task.id] = task
 
+    def get_sorted_by_due_date(self):
+        """
+            Gibt Liste der Aufgaben zurück, die in der 
+            Zukunft liegen oder, die in der Vergangenheit liegen
+            und noch nicht erledigt sind. Sortiert nach Datum aufsteigend
+            Args:
+                None
+            Returns:
+                Liste mit anstehenden oder noch nicht erledinten
+                Aufgaben
+        """
+
+        sorted_tasks_by_due_date = sorted(
+            # Liste der offenen Aufgaben
+            [task for task in self.tasks.values() if not task.done],
+            # sortiert nach due_date
+            key=lambda value: value.due_date)
+
+        return sorted_tasks_by_due_date
+
     def get_task_count(self, done=None):
         """
             Gibt die Anzahl der noch zu erledigenden Aufgaben zurück
@@ -357,6 +377,7 @@ def calculate_task_average():
     return avg
 
 
+'''
 def upcoming_tasks():
     today = datetime.datetime.now().strftime("%d-%m-%Y")
     upcoming = sorted(
@@ -364,7 +385,7 @@ def upcoming_tasks():
         key=lambda x: x[0]
     )
     return upcoming
-
+'''
 
 '''
 def cleanup():
@@ -379,10 +400,10 @@ def cleanup():
     tasks.update(temp)
 '''
 
-
+'''
 def get_task_count():
     return sum(1 for _ in tasks) if tasks else 0
-
+'''
 
 '''add_task("Projekt abschließen", "25-05-2025", 1, task_id="hello")
 add_task("Projekt abschließen", "25-05-2025", 1)
@@ -398,26 +419,3 @@ cleanup()
 print("Gesamtzahl der Aufgaben:", get_task_count())
 '''
 
-aufg1 = Task("Unikram", "27.10.2025", 2)
-aufg2 = Task("Expose", "11.10.2025", 3)
-ufgabenliste = TaskList()
-
-
-aufgabenliste.add_task(aufg1)
-aufgabenliste.add_task(aufg2)
-aufgabenliste.print_task_list()
-# aufgabenliste.remove_task(aufg1)
-aufgabenliste.print_task_list(done=False)
-aufgabenliste.mark_task_as_done(aufg2)
-aufgabenliste.print_task_list()
-aufg3 = Task("Weihnachten", "11.12.2025", "Test")
-aufgabenliste.add_task(aufg3)
-print("alle Tasks")
-aufgabenliste.print_task_list()
-print("nur offene")
-aufgabenliste.print_task_list(done=False)
-print("nur erledigte")
-aufgabenliste.print_task_list(done=True)
-aufgabenliste.del_finished_tasks()
-print("Nach cleanup")
-aufgabenliste.print_task_list()
