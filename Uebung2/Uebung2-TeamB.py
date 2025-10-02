@@ -1,4 +1,5 @@
-# Teilnehmer: XXXX und XXXX
+# Teilnehmer: RNSR und ANGE
+
 
 import datetime
 import random
