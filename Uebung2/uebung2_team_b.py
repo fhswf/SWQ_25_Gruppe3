@@ -1,30 +1,50 @@
 # Teilnehmer: RNSR und ANGE
 
 """
+Dieses Modul enthält die Klassen `Task` und `TaskManager` zur Verwaltung von Aufgaben.
+Es umfasst Funktionen zum Hinzufügen, Löschen, Bearbeiten und Anzeigen von Aufgaben.
+"""
+
+import uuid
+import datetime
+
+# pylint: disable=W0105, R0913, C0114
+
+
+"""
 Aufgabe 1:
 Verständnisprobleme im Code:
-- `tasks` und `backup_tasks` sollten gleich initialisiert werden, um Fehler zu vermeiden. (None vs dict)
+- `tasks` und `backup_tasks` sollten gleich initialisiert werden, um Fehler zu vermeiden.
+ (None vs dict)
 - Was ist der Sinn hinter backup_tasks? Es wird nie verwendet.
-- Wieso sind `tasks` und `backup_tasks` globale Variablen? Wäre es nicht besser, sie als Parameter zu übergeben oder in einer Klasse zu kapseln?
+- Wieso sind `tasks` und `backup_tasks` globale Variablen?
+ Wäre es nicht besser, sie als Parameter zu übergeben oder in einer Klasse zu kapseln?
 
 - `add_task`:
-- Ein `task` sollte eine eigene Datenstruktur sein und keine Liste mit verschiedenen Attributen. Wieso wurde sich dafür entschieden?
-- `task_id` wird zufällig berechnet (len(tasks) + random.randint), Kollisionen möglich bei einem Bereich von 2 bis 7. Besser UUID verwenden. Wieso sollte dies nicht verändert werden? (Kommentar)
-- `task_id` kann vom Benutzer gesetzt werden, was zu einem anderem Datentyp führen kann (string vs int).
+- Ein `task` sollte eine eigene Datenstruktur sein und keine Liste mit verschiedenen Attributen.
+ Wieso wurde sich dafür entschieden?
+- `task_id` wird zufällig berechnet (len(tasks) + random.randint),
+ Kollisionen möglich bei einem Bereich von 2 bis 7. Besser UUID verwenden.
+Wieso sollte dies nicht verändert werden? (Kommentar)
+- `task_id` kann vom Benutzer gesetzt werden, was zu einem anderem Datentyp führen kann 
+(string vs int).
 
 - `mark_done`: 
-- Wieso hat `mark_done` keinen Rückgabewert, wenn die Aufgabe nicht gefunden wird? Bzw. wieso wird kein Boolean zurückgegeben wie bei `remove_task`?
+- Wieso hat `mark_done` keinen Rückgabewert, wenn die Aufgabe nicht gefunden wird?
+ Bzw. wieso wird kein Boolean zurückgegeben wie bei `remove_task`?
 
 - `process_tasks`:
 - Wieso hat `process_tasks` False als festen Rückgabewert und ein `# TODO` Kommentar?
 - Soll `process_tasks` eine zufällige Aufgabe markieren/unmarkieren? Wieso? 
 
 - `calculate_task_average`:
-- `calculate_task_average` berechnet den Durchschnitt der task_ids, was wenig Sinn ergibt. Vielleicht sollte es die durchschnittliche Priorität sein?
+- `calculate_task_average` berechnet den Durchschnitt der task_ids, was wenig Sinn ergibt.
+ Vielleicht sollte es die durchschnittliche Priorität sein?
 - Namen der Funktion ist irreführend bzw. nicht sprechend
 
 - `upcoming_tasks`:
-- `upcoming_tasks` sortiert nach Name und nicht nach Datum, was sinnvoller wäre. Desweiteren wäre ein Parameter für ASC bzw. DESC sinnvoll.
+- `upcoming_tasks` sortiert nach Name und nicht nach Datum, was sinnvoller wäre. 
+Desweiteren wäre ein Parameter für ASC bzw. DESC sinnvoll.
 - Die Ausgabe ist auch eine komplett andere als bei `show_tasks`. Wieso?
 
 - `cleanup`:
@@ -51,30 +71,54 @@ Negative Aspekte:
 - Keine Typannotationen oder Docstrings → Verständlichkeit und Lesbarkeit leiden.
 - Keine Fehlerbehandlung bei ungültigen Eingaben (z. B. nicht existierende Task-IDs).
 - Inkonsistente Datentypen für task_id (mal String, mal int).
-- Methoden wie calculate_task_average oder process_tasks haben unklare bzw. fragwürdige Funktionalität.
+- Methoden wie calculate_task_average oder process_tasks haben unklare 
+bzw. fragwürdige Funktionalität.
 - Vermischung von deutscher und englischer Sprache (Kommentar vs. Variablen und Funktionsnamen).
 - Datum wird als String verglichen → fehleranfällig und nicht robust.
 
 Verbesserungsvorschläge:
-- Einführung einer Task-Klasse oder Nutzung von Dictionaries mit klaren Schlüsseln (name, due_date, priority, ...).
-- Entfernen globaler Variablen → stattdessen Übergabe von Datenstrukturen oder Nutzung einer TaskManager-Klasse.
+- Einführung einer Task-Klasse oder Nutzung von Dictionaries mit klaren Schlüsseln 
+(name, due_date, priority, ...).
+- Entfernen globaler Variablen → stattdessen Übergabe von Datenstrukturen 
+oder Nutzung einer TaskManager-Klasse.
 - Einheitliche und sprechende Benennungen in Englisch oder Deutsch.
 - Nutzung von datetime-Objekten statt Strings für Datumsvergleiche.
 - Hinzufügen von Docstrings und Typannotationen für bessere Lesbarkeit.
 - Fehlerbehandlung für ungültige Eingaben (z. B. Exception oder Rückgabewert).
 - Konsistente Handhabung von Task-IDs (eindeutig, nur int oder nur string).
-- Entfernen oder Überarbeiten unklarer Funktionen (z. B. calculate_task_average, process_tasks).
+- Entfernen oder Überarbeiten unklarer Funktionen 
+(z. B. calculate_task_average, process_tasks).
 - Ergänzen von Unit-Tests, um Robustheit und Wartbarkeit zu erhöhen.
 - Nutzung der main-Funktion für das Modul.
 
 """
 
-import uuid
-import datetime
-
 
 class Task:
-    def __init__(self, name: str, due_date: datetime.datetime, task_id: str, priority: int = 3, assigned_to: str = "user1"):
+    """
+    Repräsentiert eine Aufgabe mit Name, Fälligkeitsdatum, Priorität, zugewiesenem Benutzer 
+    und Status.
+
+    Attribute:
+        name (str): Name der Aufgabe.
+        due_date (datetime.datetime): Fälligkeitsdatum der Aufgabe.
+        priority (int): Prioritätslevel der Aufgabe (Standard: 3).
+        assigned_to (str): Benutzer, dem die Aufgabe zugewiesen ist (Standard: "user1").
+        task_id (str): Eindeutige Kennung der Aufgabe.
+        is_done (bool): Gibt an, ob die Aufgabe erledigt ist.
+        created_at (datetime.datetime): Zeitpunkt der Erstellung der Aufgabe.
+
+    Methoden:
+        mark_done():
+            Markiert die Aufgabe als erledigt.
+
+        __repr__():
+            Gibt eine String-Repräsentation der Aufgabe zurück, 
+            inkl. Name, Priorität, Fälligkeitsdatum und Status.
+    """
+
+    def __init__(self, name: str, due_date: datetime.datetime, task_id: str, priority: int = 3,
+                 assigned_to: str = "user1"):
         self.name = name
         self.due_date = due_date
         self.priority = priority
@@ -84,18 +128,44 @@ class Task:
         self.created_at = datetime.datetime.now()
 
     def mark_done(self):
+        """
+        Markiert die aktuelle Aufgabe als erledigt.
+        """
         self.is_done = True
 
     def __repr__(self):
         status = "Erledigt" if self.is_done else "Offen"
-        return f"{self.name} ({self.priority}) - bis {self.due_date.strftime('%d-%m-%Y')} - {status}"
+        return f"{self.name} ({self.priority}) " + \
+               f"- bis {self.due_date.strftime('%d-%m-%Y')} - {status}"
 
 
 class TaskManager:
+    """
+    TaskManager verwaltet Aufgaben mit Fälligkeitsdatum, Priorität und Status.
+
+    Methoden:
+        - add_task(name, due_date, priority=3, task_id=None): Fügt eine neue Aufgabe 
+        hinzu und gibt die Task-ID zurück.
+        - remove_task(task_id): Entfernt eine Aufgabe anhand ihrer ID.
+        - mark_done_by_id(task_id): Markiert eine Aufgabe als erledigt anhand ihrer ID.
+        - mark_done_by_name(task_name): Markiert eine Aufgabe als erledigt anhand ihres Namens.
+        - show_tasks(): Gibt alle Aufgaben mit ihren Details aus.
+        - toggle_task_status(task_id): Wechselt den Erledigt-Status einer Aufgabe.
+        - calculate_average_priority(): Berechnet die durchschnittliche Priorität aller Aufgaben.
+        - upcoming_tasks(): Gibt alle noch nicht abgelaufenen Aufgaben 
+        sortiert nach Fälligkeitsdatum zurück.
+        - cleanup(): Entfernt alle erledigten Aufgaben aus der Liste.
+        - get_task_count(): Gibt die Anzahl der aktuellen Aufgaben zurück.
+
+    Attribute:
+        - tasks (dict[str, Task]): Dictionary mit allen Aufgaben, indiziert nach Task-ID.
+    """
+
     def __init__(self):
         self.tasks: dict[str, Task] = {}
 
-    def add_task(self, name: str, due_date: str, priority: int = 3, task_id: str | None = None) -> str:
+    def add_task(self, name: str, due_date: str, priority: int = 3,
+                 task_id: str | None = None) -> str:
         """
         Fügt eine neue Aufgabe hinzu.
         :param name: Aufgabenname
@@ -228,14 +298,21 @@ Your code has been rated at 7.18/10
 
 
 """
-- Uebung2/Uebung2-TeamB.py:6:0 - Notwendig für die Bearbeitung von Aufgabe 1 und 2, jedoch hätte man auch Zeilen auf 80 char begrenzen können.
-Die Grenzen der Zeilenlänge sind jedoch nicht mehr allzu relevant, da viele Editoren und IDEs dies automatisch umbrechen und aufgrund entsprechend großer Bildschirme.
-- Uebung2/Uebung2-TeamB.py:1:0: C0103: - Stimmen wir zu, der Dateiname sollte pythonic sein, also uebung2_team_b.py
+- Uebung2/Uebung2-TeamB.py:6:0 - Notwendig für die Bearbeitung von Aufgabe 1 und 2,
+jedoch hätte man auch Zeilen auf 80 char begrenzen können.
+Die Grenzen der Zeilenlänge sind jedoch nicht mehr allzu relevant,
+da viele Editoren und IDEs dies automatisch umbrechen und aufgrund entsprechend großer Bildschirme.
+- Uebung2/Uebung2-TeamB.py:1:0: C0103: - Stimmen wir zu, 
+der Dateiname sollte pythonic sein, also uebung2_team_b.py
 - Uebung2/Uebung2-TeamB.py:39:0: W0105: - Betrifft Bearbeitung von Aufgabe 1 und 2, keine Bedeutung 
-- Uebung2/Uebung2-TeamB.py:72:0: C0413: - Aufgrund Bearbeitungsvorgaben, stehen die Imports nicht am Anfang der Datei.
+- Uebung2/Uebung2-TeamB.py:72:0: C0413: - Aufgrund Bearbeitungsvorgaben, 
+stehen die Imports nicht am Anfang der Datei.
 Können verschoben werden, sind dann jedoch weiter vom Code entfernt aufgrund der Aufaben 1 und 2.
-- Uebung2/Uebung2-TeamB.py:76:0: C0115: - Beschreibung der Klasse könnte ergänzt werden, ist jedoch selbsterklärend.
-- Uebung2/Uebung2-TeamB.py:77:4: - Das stimmt, jedoch sind die Argumente notwendig für z.B. spätere Funktionalitäten (Angabe eines Users, bei der Erstellung einer Aufgabe)
+- Uebung2/Uebung2-TeamB.py:76:0: C0115: - Beschreibung der Klasse könnte ergänzt werden, 
+ist jedoch selbsterklärend.
+- Uebung2/Uebung2-TeamB.py:77:4: - Das stimmt, jedoch sind die Argumente notwendig für 
+z.B. spätere Funktionalitäten (Angabe eines Users, bei der Erstellung einer Aufgabe)
 - Uebung2/Uebung2-TeamB.py:86:4: C0116: - Beschreibung der Methode könnte ergänzt werden
-- Uebung2/Uebung2-TeamB.py:94:0: C0115: - Beschreibung der Klasse könnte ergänzt werden, ist jedoch selbsterklärend.
+- Uebung2/Uebung2-TeamB.py:94:0: C0115: - Beschreibung der Klasse könnte ergänzt werden, 
+ist jedoch selbsterklärend.
 """
