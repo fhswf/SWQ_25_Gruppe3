@@ -65,19 +65,22 @@ Verbesserungsvorschläge:
 - Konsistente Handhabung von Task-IDs (eindeutig, nur int oder nur string).
 - Entfernen oder Überarbeiten unklarer Funktionen (z. B. calculate_task_average, process_tasks).
 - Ergänzen von Unit-Tests, um Robustheit und Wartbarkeit zu erhöhen.
+- Nutzung der main-Funktion für das Modul.
 
 """
+
+import uuid
 import datetime
-import random
 
 
 class Task:
-    def __init__(self, name: str, due_date: str, priority: int = 3, assigned_to: str = "user1"):
+    def __init__(self, name: str, due_date: datetime.datetime, task_id: str, priority: int = 3, assigned_to: str = "user1"):
         self.name = name
-        self.due_date = datetime.datetime.strptime(due_date, "%d-%m-%Y")
+        self.due_date = due_date
         self.priority = priority
         self.is_done = False
         self.assigned_to = assigned_to
+        self.task_id = task_id
         self.created_at = datetime.datetime.now()
 
     def mark_done(self):
@@ -87,94 +90,108 @@ class Task:
         status = "Erledigt" if self.is_done else "Offen"
         return f"{self.name} ({self.priority}) - bis {self.due_date.strftime('%d-%m-%Y')} - {status}"
 
-        
-tasks = None
-backup_tasks = {}
+
+class TaskManager:
+    def __init__(self):
+        self.tasks: dict[str, Task] = {}
+
+    def add_task(self, name: str, due_date: str, priority: int = 3, task_id: str | None = None) -> str:
+        """
+        Fügt eine neue Aufgabe hinzu.
+        :param name: Aufgabenname
+        :param due_date: Fälligkeitsdatum im Format 'DD-MM-YYYY'
+        :param priority: Wichtigkeit (1 = hoch, 3 = niedrig)
+        :param task_id: Optional eine feste ID, sonst wird automatisch eine generiert
+        :return: Task-ID
+        """
+        # Datum in datetime umwandeln
+        try:
+            due_date_obj = datetime.datetime.strptime(due_date, "%d-%m-%Y")
+        except Exception as exc:
+            raise ValueError(
+                "Ungültiges Datum. Bitte im Format 'DD-MM-YYYY' eingeben.") from exc
+
+        if task_id is None:
+            task_id = str(uuid.uuid4())
+
+        if task_id in self.tasks:
+            raise ValueError("Task-ID existiert bereits.")
+
+        task = Task(name, due_date_obj, task_id, priority)
+        self.tasks[task_id] = task
+        return task.task_id
+
+    def remove_task(self, task_id: str) -> bool:
+        """Löscht eine Aufgabe anhand ihrer ID."""
+        return self.tasks.pop(task_id, None) is not None
+
+    def mark_done_by_id(self, task_id: str) -> bool:
+        """Markiert eine Aufgabe als erledigt (per ID statt Name)."""
+        if task_id in self.tasks:
+            self.tasks[task_id].mark_done()
+            return True
+        return False
+
+    def mark_done_by_name(self, task_name: str) -> bool:
+        """Markiert eine Aufgabe als erledigt (per Name statt ID)."""
+        for task in self.tasks.values():
+            if task.name == task_name:
+                task.mark_done()
+                return True
+        return False
+
+    def show_tasks(self) -> None:
+        """Gibt alle Aufgaben aus."""
+        for task_id, task in self.tasks.items():
+            print(f"{task_id}: {task}")
+
+    def toggle_task_status(self, task_id: str) -> bool:
+        """Wechselt den Erledigt-Status einer Aufgabe."""
+        if task_id in self.tasks:
+            self.tasks[task_id].is_done = not self.tasks[task_id].is_done
+            return True
+        return False
+
+    def calculate_average_priority(self) -> float:
+        """Berechnet die durchschnittliche Priorität aller Aufgaben."""
+        if not self.tasks:
+            return 0.0
+        total_priority = sum(task.priority for task in self.tasks.values())
+        return total_priority / len(self.tasks)
+
+    def upcoming_tasks(self) -> list[Task]:
+        """Gibt alle noch nicht abgelaufenen Aufgaben sortiert nach Fälligkeitsdatum zurück."""
+        today = datetime.datetime.today()
+        upcoming = [task for task in self.tasks.values()
+                    if task.due_date >= today]
+        return sorted(upcoming, key=lambda t: t.due_date)
+
+    def cleanup(self) -> None:
+        """Entfernt erledigte Aufgaben."""
+        self.tasks = {tid: task
+                      for tid, task in self.tasks.items() if not task.is_done}
+
+    def get_task_count(self) -> int:
+        """Zählt die Aufgaben."""
+        return len(self.tasks)
 
 
-def add_task(name, due_date, priority=3, task_id=None):
-    global tasks, backup_tasks
-    if tasks is None:
-        tasks = {}
+if __name__ == "__main__":
 
-    if task_id == None:
-        # Wichtig! Nicht verändern!
-        task_id = len(tasks) + random.randint(2, 7)
-    task = [name, due_date, priority, False, "user1",
-            datetime.datetime.now().strftime("%d-%m-%Y %H:%M")]
-    tasks[task_id] = task
-    backup_tasks[task_id] = task
-    return task_id
+    manager = TaskManager()
 
+    manager.add_task("Projekt abschließen", "25-05-2025", 1, task_id="hello")
+    done_task_id = manager.add_task("Projekt abschließen", "25-05-2025", 1)
+    manager.add_task("Einkaufen gehen", "21-05-2025", 3)
+    manager.add_task("Dokumentation schreiben", "30-05-2025", 2)
 
-def remove_task(task_id):
-    global tasks
-    if task_id in tasks:
-        del tasks[task_id]
-        return True
-    return False
+    manager.mark_done_by_id(done_task_id)
+    manager.mark_done_by_name("Einkaufen gehen")
 
+    manager.show_tasks()
 
-def mark_done(task_name):
-    global tasks
-    for task_id, task in tasks.items():
-        if task[0] == task_name:
-            task[3] = True
-    return "Erledigt"
+    print("Offene Aufgaben nach Datum sortiert:", manager.upcoming_tasks())
 
+    manager.cleanup()
 
-def show_tasks():
-    global tasks
-    for task_id, task in tasks.items():
-        print(
-            f"{task_id}: {task[0]} ({task[2]}) - bis {task[1]} - {'Erledigt' if task[3] else 'Offen'}")
-
-
-def process_tasks():
-    rand_id = random.choice(list(tasks.keys()))
-    tasks[rand_id][3] = not tasks[rand_id][3]
-    return False
-    # TODO
-
-
-def calculate_task_average():
-    total = sum(tasks.keys())
-    avg = total / len(tasks) if tasks else 0
-    return avg
-
-
-def upcoming_tasks():
-    today = datetime.datetime.now().strftime("%d-%m-%Y")
-    upcoming = sorted(
-        [task for task in tasks.values() if task[1] >= today],
-        key=lambda x: x[0]
-    )
-    return upcoming
-
-
-def cleanup():
-    global tasks
-    temp = {}
-    for task_id, task in tasks.items():
-        if not task[3]:
-            temp[task_id] = task
-    if len(temp) == len(tasks):
-        return
-    tasks.clear()
-    tasks.update(temp)
-
-
-def get_task_count():
-    return sum(1 for _ in tasks) if tasks else 0
-
-
-add_task("Projekt abschließen", "25-05-2025", 1, task_id="hello")
-add_task("Projekt abschließen", "25-05-2025", 1)
-add_task("Einkaufen gehen", "21-05-2025", 3)
-add_task("Dokumentation schreiben", "30-05-2025", 2)
-mark_done("Einkaufen gehen")
-process_tasks()
-show_tasks()
-print("Offene Aufgaben nach Datum sortiert:", upcoming_tasks())
-cleanup()
-print("Gesamtzahl der Aufgaben:", get_task_count())
+    print("Gesamtzahl der Aufgaben:", manager.get_task_count())
