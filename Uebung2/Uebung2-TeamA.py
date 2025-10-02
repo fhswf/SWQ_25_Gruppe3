@@ -55,7 +55,7 @@
         - iteriert über das task_dict und prüft für jeden task, ob er unter index 3 False gespeichert hat (Offene Fälle)
             - wenn das der Fall ist, wird der Fall in das neue dict geschrieben
         - das ursprüngliche taks_dict wird geleert
-        - das task_dict wird allen Einträgen aus temp wieder gefüllt 
+        - das task_dict wird allen Einträgen aus temp wieder gefüllt
     9) get_task_count()
         - gibt die Anzahl an Elementen im task_dict zurück
         - das passiert indem per Iteration über das dict für jedes Element 1 zurückgegeben wird und diese aufsummiert werden
@@ -66,8 +66,8 @@
     - unpassende Datentypen, z.B. ein task als Liste
     - einmalige Benutzung von #TODO
         - einerseits ist an der Stelle des Vorkommens nicht klar, worin das todo noch besteht
-        - andererseits wirkt das als wäre der Rest des Codes fertig, was weitere Fragen aufwirft, 
-    
+        - andererseits wirkt das als wäre der Rest des Codes fertig, was weitere Fragen aufwirft,
+
 
     A2
 
@@ -78,7 +78,7 @@
             - So kann nicht sinnvoll gewollt sein, dass alle Todos mit demselben Namen
             mit einem Schritt auf erledigt gesetzt werden
             - ein weiteres Beispiel ist die "Filterung" der kommenden Task anhand des Datum,
-            das als String formatiert ist. 
+            das als String formatiert ist.
         - Zuverlässigkeit / Robustheit
             - das System ist fehleranfällig
             - es gibt keinerlei Ausnahmebehandlungen, welche sich anbieten würden, alleine weil
@@ -98,7 +98,7 @@
 
         Wartbarkeit
         - die Wartbarkeit ist mangelhaft. Der gesamte Quelltext muss angepasst werden,
-        wenn sie die Struktur eines tasks ändert. 
+        wenn sie die Struktur eines tasks ändert.
         - auch hier könnte ein objektorientierter Ansatz helfen
     '''
 import datetime
@@ -121,7 +121,7 @@ class Task:
     default_priority = 1
 
     def __init__(self, name=None, due_date=None, priority=None):
-        """ 
+        """
             Instanziiert eine neue Aufgabe
             Args:
                 name: Name der Aufgabe
@@ -130,7 +130,7 @@ class Task:
             returns:
                 None
         """
-        self.id = uuid.uuid4()
+        self.id = int(uuid.uuid4())
         if name is None:
             self.name = "Platzhalter"
         else:
@@ -144,7 +144,7 @@ class Task:
             self.set_priority(priority)
 
     def set_done(self):
-        """ 
+        """
             Setzt Aufgabe als erledigt
             Args:
                 None
@@ -187,7 +187,7 @@ class Task:
 
     def __str__(self):
         return f"""
-        Aufgabe {self.name} mit {str(self.id)} ist fällig am {datetime.datetime.strftime(self.due_date,Task.format_code)} 
+        Aufgabe {self.name} mit {str(self.id)} ist fällig am {datetime.datetime.strftime(self.due_date,Task.format_code)}
         und mit Priortät  {Task.priorities[self.priority]} zu behandeln.\n
         """
 
@@ -209,21 +209,33 @@ class TaskList:
             Returns:
                 None
         """
-        self.tasks[str(task.id)] = task
+        self.tasks[task.id] = task
 
-    def get_task_count(self):
+    def get_task_count(self, done=None):
         """
             Gibt die Anzahl der noch zu erledigenden Aufgaben zurück
             Args:
-                None
+                done: None, True oder False
             Returns:
-                Anzahl der noch zu erledigenden Aufgaben als int    
+                Anzahl aller Aufgaben oder
+                Anzahl der Aufgaben, die
+                    fertig sind, wenn done= True
+                    offen sind, wenn done = False
+                als int
+            Raises:
+                ValueError, wenn done weder None noch boolean
+
         """
-        return len([task for task in self.tasks.values() if not task.done])
+        if done is None:
+            return len(self.tasks)
+        if isinstance(done, bool):
+            return len([task for task in self.tasks.values() if task.done == done])
+        raise (ValueError)
 
     def print_task_list(self, done=None):
         """
-            Druckt die Taskliste je nach mode komplett oder nur erledigte/nicht erledigte
+            Druckt die Taskliste je nach mode komplett (done==None)
+            oder nur erledigte (done==True) /nicht erledigte (done==False)
             Args:
                 done: None, True or False
             Returns:
@@ -231,18 +243,22 @@ class TaskList:
             Raises:
                 ValueError, wenn done weder None noch boolean
         """
+
+        if self.get_task_count() == 0:
+            print("Keine Aufgaben in Aufgabenliste")
+            return
+
         if done is None:
-            print("Gesamte Aufgabenliste")
-            for task in self.tasks:
+            for task in self.tasks.values():
                 print(task)
         elif isinstance(done, bool):
-            for task in self.tasks:
+            for task in self.tasks.values():
                 if task.done == done:
                     print(task)
         else:
             raise (ValueError)
 
-    def remove_task(self, task_id):
+    def remove_task(self, task: Task, ):
         """
             Löscht einen Task anhand seiner ID
             Args:
@@ -250,9 +266,9 @@ class TaskList:
             Returns:
                 None
         """
-        del self.tasks[task_id]
+        del self.tasks[task.id]
 
-    def mark_task_as_done(self,task_id):
+    def mark_task_as_done(self, task: Task):
         """
             Markiert eine Aufgabe der Liste als erledigt
             Args:
@@ -260,15 +276,16 @@ class TaskList:
             Return:
                 None
             Raises:
-                IndexError, wenn task_id nicht gefunden
+                KeyError, wenn task.id nicht gefunden
         """
-        if task_id in self.tasks:
-            self.tasks[task_id].set_done()
+        if task.id in self.tasks:
+            self.tasks[task.id].set_done()
         else:
-            raise(IndexError)
-        
+            raise (KeyError("Aufgabe nicht in Liste"))
+
     def __str__(self):
         return " ".join([task.__str__() for task in self.tasks.values()])
+
 
 aufgabenliste = TaskList()
 
@@ -288,20 +305,23 @@ def add_task(name, due_date, priority=3, task_id=None):
     return task_id
 '''
 
+'''
 def remove_task(task_id):
     global tasks
     if task_id in tasks:
         del tasks[task_id]
         return True
     return False
+'''
 
-
+'''
 def mark_done(task_name):
     global tasks
     for task_id, task in tasks.items():
         if task[0] == task_name:
             task[3] = True
     return "Erledigt"
+'''
 
 
 def show_tasks():
@@ -349,7 +369,6 @@ def get_task_count():
     return sum(1 for _ in tasks) if tasks else 0
 
 
-
 '''add_task("Projekt abschließen", "25-05-2025", 1, task_id="hello")
 add_task("Projekt abschließen", "25-05-2025", 1)
 add_task("Einkaufen gehen", "21-05-2025", 3)
@@ -364,9 +383,15 @@ cleanup()
 print("Gesamtzahl der Aufgaben:", get_task_count())
 '''
 
-aufgabenliste = TaskList()
-print(Task("Unikram", "27.10.2025", 2))
-print(Task("Unikram", "test", 47))
-aufgabenliste.add_task(Task("Unikram", "27.10.2025", 2))
-aufgabenliste.add_task(Task("Unikram", "test", 47))
-print(aufgabenliste)
+aufg1 = Task("Unikram", "27.10.2025", 2)
+aufg2 = Task("Expose", "11.10.2025", 3)
+ufgabenliste = TaskList()
+
+
+aufgabenliste.add_task(aufg1)
+aufgabenliste.add_task(aufg2)
+aufgabenliste.print_task_list()
+# aufgabenliste.remove_task(aufg1)
+aufgabenliste.print_task_list(done=False)
+aufgabenliste.mark_task_as_done(aufg2)
+aufgabenliste.print_task_list(done=False)
