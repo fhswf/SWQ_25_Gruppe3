@@ -272,6 +272,7 @@ class TaskList:
 
 aufgabenliste = TaskList()
 
+'''
 def add_task(name, due_date, priority=3, task_id=None):
     global tasks, backup_tasks
     if tasks is None:
@@ -285,7 +286,7 @@ def add_task(name, due_date, priority=3, task_id=None):
     tasks[task_id] = task
     backup_tasks[task_id] = task
     return task_id
-
+'''
 
 def remove_task(task_id):
     global tasks
