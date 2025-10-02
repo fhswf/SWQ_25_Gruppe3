@@ -225,3 +225,17 @@ Uebung2/Uebung2-TeamB.py:94:0: C0115: Missing class docstring (missing-class-doc
 -----------------------------------
 Your code has been rated at 7.18/10
 """
+
+
+"""
+- Uebung2/Uebung2-TeamB.py:6:0 - Notwendig für die Bearbeitung von Aufgabe 1 und 2, jedoch hätte man auch Zeilen auf 80 char begrenzen können.
+Die Grenzen der Zeilenlänge sind jedoch nicht mehr allzu relevant, da viele Editoren und IDEs dies automatisch umbrechen und aufgrund entsprechend großer Bildschirme.
+- Uebung2/Uebung2-TeamB.py:1:0: C0103: - Stimmen wir zu, der Dateiname sollte pythonic sein, also uebung2_team_b.py
+- Uebung2/Uebung2-TeamB.py:39:0: W0105: - Betrifft Bearbeitung von Aufgabe 1 und 2, keine Bedeutung 
+- Uebung2/Uebung2-TeamB.py:72:0: C0413: - Aufgrund Bearbeitungsvorgaben, stehen die Imports nicht am Anfang der Datei.
+Können verschoben werden, sind dann jedoch weiter vom Code entfernt aufgrund der Aufaben 1 und 2.
+- Uebung2/Uebung2-TeamB.py:76:0: C0115: - Beschreibung der Klasse könnte ergänzt werden, ist jedoch selbsterklärend.
+- Uebung2/Uebung2-TeamB.py:77:4: - Das stimmt, jedoch sind die Argumente notwendig für z.B. spätere Funktionalitäten (Angabe eines Users, bei der Erstellung einer Aufgabe)
+- Uebung2/Uebung2-TeamB.py:86:4: C0116: - Beschreibung der Methode könnte ergänzt werden
+- Uebung2/Uebung2-TeamB.py:94:0: C0115: - Beschreibung der Klasse könnte ergänzt werden, ist jedoch selbsterklärend.
+"""
