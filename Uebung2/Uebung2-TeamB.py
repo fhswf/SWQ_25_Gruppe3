@@ -35,6 +35,38 @@ Verständnisprobleme im Code:
 
 """
 
+
+"""
+Aufgabe 2: 
+
+Positive Aspekte:
+- Funktionen sind thematisch klar getrennt (add, remove, mark_done, show, cleanup, ...).
+- Der Code ist lauffähig und demonstriert grundlegende Funktionalität.
+- Nutzung von Standardbibliotheken (datetime, random).
+- Testaufrufe am Ende der Datei erleichtern erstes Verständnis.
+
+Negative Aspekte:
+- Globale Variablen (tasks, backup_tasks) → erschwert Testbarkeit und Wartbarkeit.
+- Aufgaben werden als Liste gespeichert → unverständlich, was Index 0,1,2,... bedeutet.
+- Keine Typannotationen oder Docstrings → Verständlichkeit und Lesbarkeit leiden.
+- Keine Fehlerbehandlung bei ungültigen Eingaben (z. B. nicht existierende Task-IDs).
+- Inkonsistente Datentypen für task_id (mal String, mal int).
+- Methoden wie calculate_task_average oder process_tasks haben unklare bzw. fragwürdige Funktionalität.
+- Vermischung von deutscher und englischer Sprache (Kommentar vs. Variablen und Funktionsnamen).
+- Datum wird als String verglichen → fehleranfällig und nicht robust.
+
+Verbesserungsvorschläge:
+- Einführung einer Task-Klasse oder Nutzung von Dictionaries mit klaren Schlüsseln (name, due_date, priority, ...).
+- Entfernen globaler Variablen → stattdessen Übergabe von Datenstrukturen oder Nutzung einer TaskManager-Klasse.
+- Einheitliche und sprechende Benennungen in Englisch oder Deutsch.
+- Nutzung von datetime-Objekten statt Strings für Datumsvergleiche.
+- Hinzufügen von Docstrings und Typannotationen für bessere Lesbarkeit.
+- Fehlerbehandlung für ungültige Eingaben (z. B. Exception oder Rückgabewert).
+- Konsistente Handhabung von Task-IDs (eindeutig, nur int oder nur string).
+- Entfernen oder Überarbeiten unklarer Funktionen (z. B. calculate_task_average, process_tasks).
+- Ergänzen von Unit-Tests, um Robustheit und Wartbarkeit zu erhöhen.
+
+"""
 import datetime
 import random
 
