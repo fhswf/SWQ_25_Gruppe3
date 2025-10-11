@@ -21,7 +21,7 @@ import pytest
 from decimal import Decimal
 
 # TODO: Team A - Entkommentiert nach eurer Implementierung:
-# from ..Code.konto import Konto
+from Uebung3.Code.konto import Konto
 
 
 class TestKontoErstellung:
@@ -41,12 +41,43 @@ class TestKontoErstellung:
         - Konto mit ungültigem Saldo (negativ, String) → Exception?
         """
         # TODO: Team A - Ersetzen Sie diesen Placeholder durch echte Tests
-        assert True, "Placeholder - bitte durch echte Tests ersetzen!"
-
         # Beispiel-Code (entkommentiert nach Implementierung):
         # konto = Konto(1, Decimal("100.00"))
         # assert konto.konto_id == 1
         # assert konto.saldo == Decimal("100.00")
+        
+    def test_create_konto_with_valid_id_and_positive_balance(self):
+        """Konto mit gültiger ID und positivem Saldo erstellen"""
+        konto = Konto(1, Decimal("100.00"))
+        assert konto.konto_id == 1
+        assert konto.saldo == Decimal("100.00")
+    
+    def test_create_konto_with_valid_id_and_zero_balance(self):
+        """Konto mit gültiger ID und Saldo 0 erstellen"""
+        konto = Konto(2, Decimal("0.00"))
+        assert konto.konto_id == 2
+        assert konto.saldo == Decimal("0.00")
+
+    def test_create_konto_with_invalid_id(self):
+        """Konto mit ungültiger ID (negativ, 0, String,None) → Exception?"""
+        with pytest.raises(ValueError):
+            Konto(-1, Decimal("100.00"))
+        with pytest.raises(ValueError):
+            Konto(0, Decimal("100.00"))
+        with pytest.raises(ValueError):
+            Konto("abc", Decimal("100.00"))
+        with pytest.raises(ValueError):
+            Konto(None, Decimal("100.00"))
+    
+         
+    def test_create_konto_with_invalid_balance(self):
+        """Konto mit ungültigem Saldo (negativ, String) → Exception?"""
+        with pytest.raises(ValueError):
+            Konto(1, Decimal("-50.00"))
+        with pytest.raises(ValueError):
+            Konto(1, "abc")
+
+
 
 
 class TestKontoEigenschaften:
