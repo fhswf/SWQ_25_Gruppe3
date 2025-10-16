@@ -1,3 +1,4 @@
+# Implementiert von: FARN und DLWG
 """
 Hier sollen Sie Ihre Implementierung der Konto-Klasse erstellen.
 
@@ -5,7 +6,7 @@ TODO: Implementieren Sie die Konto-Klasse basierend auf dem KontoInterface
 """
 
 from decimal import Decimal
-from interfaces import KontoInterface
+from .interfaces import KontoInterface
 
 class Konto(KontoInterface):
     """
@@ -18,8 +19,10 @@ class Konto(KontoInterface):
     """
     
     def __init__(self, konto_id: int, saldo: Decimal = Decimal('0.00')):
-        if konto_id is None or not isinstance(konto_id, int):
+        if konto_id is None or not isinstance(konto_id, int) or konto_id <= 0:
             raise ValueError("konto_id muss eine numerische ID sein und darf nicht leer sein.")
+        if not isinstance(saldo, Decimal):
+            raise ValueError("Saldo muss vom Typ Decimal sein.")
         if saldo < Decimal('0.00'):
             raise ValueError("Startsaldo darf nicht negativ sein.")
         self._konto_id = konto_id

@@ -1,3 +1,4 @@
+# Implementiert von: FARN und DLWG
 """
 Test-Template für die Konto-Klasse (Test-After Approach)
 ========================================================
@@ -21,7 +22,7 @@ import pytest
 from decimal import Decimal
 
 # TODO: Team A - Entkommentiert nach eurer Implementierung:
-from Uebung3.Code.konto import Konto
+from ..Code.konto import Konto
 
 
 class TestKontoErstellung:
@@ -73,9 +74,9 @@ class TestKontoErstellung:
     def test_create_konto_with_invalid_balance(self):
         """Konto mit ungültigem Saldo (negativ, String) → Exception?"""
         with pytest.raises(ValueError):
-            Konto(1, Decimal("-50.00"))
-        with pytest.raises(ValueError):
             Konto(1, "abc")
+        with pytest.raises(ValueError):
+            Konto(1, Decimal("-50.00"))
 
 
 
