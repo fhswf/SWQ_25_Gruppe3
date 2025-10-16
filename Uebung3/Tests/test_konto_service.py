@@ -26,18 +26,36 @@ from decimal import Decimal
 from ..Code.konto_service import KontoService
 from ..Code.konto import Konto
 
+
 @pytest.fixture
 def service():
     return KontoService()
+
 
 class TestKontoServiceErstellung:
     """
     Tests für KontoService-Erstellung und Setup
     TODO: Team B - Testet Service-Initialisierung
     """
+
     def test_service_initialisierung(self, service):
         assert isinstance(service, KontoService)
         assert service.konten_auflisten() == []
+
+    def test_service_initialisierung_mit_konten(self, service):
+        konto_id1 = service.konto_erstellen(Decimal("100.00"))
+        konto_id2 = service.konto_erstellen(Decimal("200.00"))
+
+        konten = service.konten_auflisten()
+        assert len(konten) == 2
+        assert any(k["konto_id"] == konto_id1 and k["saldo"]
+                   == Decimal("100.00") for k in konten)
+        assert any(k["konto_id"] == konto_id2 and k["saldo"]
+                   == Decimal("200.00") for k in konten)
+
+    def test_service_initialisierung_mit_leeren_konten(self, service):
+        konten = service.konten_auflisten()
+        assert len(konten) == 0
 
     def test_placeholder_service_erstellung(self):
         """
@@ -61,6 +79,7 @@ class TestKontoVerwaltung:
     Tests für Konto-Erstellung und -Verwaltung
     TODO: Team B - Testet alle Konto-Verwaltungs-Funktionen
     """
+
     def test_konto_erstellen(self, service):
         konto_id = service.konto_erstellen(Decimal("100.00"))
         konten = service.konten_auflisten()
@@ -73,6 +92,20 @@ class TestKontoVerwaltung:
         id2 = service.konto_erstellen()
         assert id2 > id1
         assert service.get_max_konto_id() == id2
+
+    def test_get_max_konto_id_mit_leeren_konten(self, service):
+        assert service.get_max_konto_id() == 0
+
+    def test_konto_erstellen_ohne_saldo(self, service):
+        konto_id = service.konto_erstellen()
+        konten = service.konten_auflisten()
+        assert len(konten) == 1
+        assert konten[0]["saldo"] == Decimal("0.00")
+        assert konto_id == konten[0]["konto_id"]
+
+    def test_konto_erstellen_negativer_saldo(self, service):
+        with pytest.raises(ValueError):
+            service.konto_erstellen(Decimal("-50.00"))
 
     def test_placeholder_konto_erstellen(self):
         """TODO: Team B - Tests für konto_erstellen()"""
@@ -92,16 +125,19 @@ class TestKontoVerwaltung:
         # - Korrekte Anzahl und Inhalte
         assert True, "TODO: Tests für konten_auflisten implementieren"
 
+
 class TestTransaktionen:
     """
     Tests für Transaktions-Funktionen
     TODO: Team B - Testet alle Geldtransaktionen über den Service
     """
+
     def test_ueberweisen(self, service):
         id1 = service.konto_erstellen(Decimal("200.00"))
         id2 = service.konto_erstellen(Decimal("50.00"))
         service.ueberweisen(id1, id2, Decimal("25.00"))
-        konten = {k["konto_id"]: k["saldo"] for k in service.konten_auflisten()}
+        konten = {k["konto_id"]: k["saldo"]
+                  for k in service.konten_auflisten()}
         assert konten[id1] == Decimal("175.00")
         assert konten[id2] == Decimal("75.00")
 
@@ -115,6 +151,53 @@ class TestTransaktionen:
         id1 = service.konto_erstellen(Decimal("100.00"))
         with pytest.raises(ValueError):
             service.ueberweisen(id1, 999, Decimal("10.00"))
+
+    def test_ueberweisen_unzureichender_saldo(self, service):
+        id1 = service.konto_erstellen(Decimal("20.00"))
+        id2 = service.konto_erstellen(Decimal("50.00"))
+        with pytest.raises(ValueError):
+            service.ueberweisen(id1, id2, Decimal("30.00"))
+
+    def test_einziehen(self, service):
+        id1 = service.konto_erstellen(Decimal("50.00"))
+        id2 = service.konto_erstellen(Decimal("200.00"))
+        service.einziehen(id1, id2, Decimal("25.00"))
+        konto1 = [k for k in service.konten_auflisten()
+                  if k["konto_id"] == id1]
+        assert konto1[0]["saldo"] == Decimal("75.00")
+        konto2 = [k for k in service.konten_auflisten()
+                  if k["konto_id"] == id2]
+        assert konto2[0]["saldo"] == Decimal("175.00")
+
+    def test_einziehen_negativer_betrag(self, service):
+        id1 = service.konto_erstellen(Decimal("50.00"))
+        id2 = service.konto_erstellen(Decimal("200.00"))
+        with pytest.raises(ValueError):
+            service.einziehen(id1, id2, Decimal("-10.00"))
+
+    def test_einziehen_unbekanntes_konto(self, service):
+        id1 = service.konto_erstellen(Decimal("50.00"))
+        with pytest.raises(ValueError):
+            service.einziehen(id1, 999, Decimal("10.00"))
+
+    def test_einziehen_unzureichender_saldo(self, service):
+        id1 = service.konto_erstellen(Decimal("20.00"))
+        id2 = service.konto_erstellen(Decimal("200.00"))
+
+        with pytest.raises(ValueError):
+            service.einziehen(id1, id2, Decimal("30.00"))
+
+    def test_einziehen_ungueltiger_betrag(self, service):
+        id1 = service.konto_erstellen(Decimal("50.00"))
+        id2 = service.konto_erstellen(Decimal("200.00"))
+        with pytest.raises(ValueError):
+            service.einziehen(id1, id2, Decimal("0.00"))
+
+    def test_einziehen_ungueltiger_betrag_negativ(self, service):
+        id1 = service.konto_erstellen(Decimal("50.00"))
+        id2 = service.konto_erstellen(Decimal("200.00"))
+        with pytest.raises(ValueError):
+            service.einziehen(id1, id2, Decimal("-10.00"))
 
     def test_placeholder_einzahlen(self):
         """TODO: Team B - Tests für einzahlen()"""
@@ -151,6 +234,7 @@ class TestSaldoFunktionen:
     Tests für Saldo-bezogene Funktionen
     TODO: Team B - Testet Saldo-Abfragen und -Berechnungen
     """
+
     def test_gesamtsaldo_leer(self, service):
         assert service.gesamtsaldo_berechnen() == Decimal("0.00")
 
@@ -168,6 +252,7 @@ class TestSaldoFunktionen:
         # - Korrekte Summe aller Salden
         assert True, "TODO: Tests für gesamtsaldo implementieren"
 
+
 class TestIntegration:
     """
     Integration tests for KontoService.
@@ -175,6 +260,7 @@ class TestIntegration:
     This test class verifies the complete workflow of the account management system,
     ensuring that all components work together correctly.
     """
+
     def test_vollstaendiger_workflow(self, service):
         # 1. Zwei Konten erstellen
         id1 = service.konto_erstellen(Decimal("100.00"))
@@ -187,9 +273,11 @@ class TestIntegration:
         assert service.gesamtsaldo_berechnen() == Decimal("150.00")
 
         # 4. Konten prüfen
-        konten = {k["konto_id"]: k["saldo"] for k in service.konten_auflisten()}
+        konten = {k["konto_id"]: k["saldo"]
+                  for k in service.konten_auflisten()}
         assert konten[id1] == Decimal("75.00")
         assert konten[id2] == Decimal("75.00")
+
 
 class TestUtilityFunktionen:
     """
@@ -204,6 +292,7 @@ class TestUtilityFunktionen:
         # - IDs werden fortlaufend vergeben
         # - Keine doppelten IDs
         assert True, "TODO: Tests für get_max_konto_id implementieren"
+
 
 class TestKontoServiceIntegration:
     """
