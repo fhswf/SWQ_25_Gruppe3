@@ -1,3 +1,5 @@
+# Implementiert von: RNSR und ANGE
+
 """
 Test-Template für die KontoService-Klasse (Test-After Approach)
 ===============================================================
@@ -21,14 +23,21 @@ import pytest
 from decimal import Decimal
 
 # TODO: Team B - Entkommentieren Sie nach Ihrer Implementierung:
-# from ..Code.konto_service import KontoService
-# from ..Code.konto import Konto
+from ..Code.konto_service import KontoService
+from ..Code.konto import Konto
+
+@pytest.fixture
+def konto_service():
+    return KontoService()
 
 class TestKontoServiceErstellung:
     """
     Tests für KontoService-Erstellung und Setup
     TODO: Team B - Testet Service-Initialisierung
     """
+    def test_service_initialisierung(self, konto_service):
+        assert isinstance(konto_service, KontoService)
+        assert konto_service.konten_auflisten() == []
 
     def test_placeholder_service_erstellung(self):
         """
@@ -52,6 +61,18 @@ class TestKontoVerwaltung:
     Tests für Konto-Erstellung und -Verwaltung
     TODO: Team B - Testet alle Konto-Verwaltungs-Funktionen
     """
+    def test_konto_erstellen(self, service):
+        konto_id = service.konto_erstellen(Decimal("100.00"))
+        konten = service.konten_auflisten()
+        assert len(konten) == 1
+        assert konten[0]["saldo"] == Decimal("100.00")
+        assert konto_id == konten[0]["konto_id"]
+
+    def test_get_max_konto_id(self, service):
+        id1 = service.konto_erstellen()
+        id2 = service.konto_erstellen()
+        assert id2 > id1
+        assert service.get_max_konto_id() == id2
 
     def test_placeholder_konto_erstellen(self):
         """TODO: Team B - Tests für konto_erstellen()"""
@@ -76,6 +97,24 @@ class TestTransaktionen:
     Tests für Transaktions-Funktionen
     TODO: Team B - Testet alle Geldtransaktionen über den Service
     """
+    def test_ueberweisen(self, service):
+        id1 = service.konto_erstellen(Decimal("200.00"))
+        id2 = service.konto_erstellen(Decimal("50.00"))
+        service.ueberweisen(id1, id2, Decimal("25.00"))
+        konten = {k["konto_id"]: k["saldo"] for k in service.konten_auflisten()}
+        assert konten[id1] == Decimal("175.00")
+        assert konten[id2] == Decimal("75.00")
+
+    def test_ueberweisen_negativer_betrag(self, service):
+        id1 = service.konto_erstellen(Decimal("100.00"))
+        id2 = service.konto_erstellen(Decimal("50.00"))
+        with pytest.raises(ValueError):
+            service.ueberweisen(id1, id2, Decimal("-10.00"))
+
+    def test_ueberweisen_unbekanntes_konto(self, service):
+        id1 = service.konto_erstellen(Decimal("100.00"))
+        with pytest.raises(ValueError):
+            service.ueberweisen(id1, 999, Decimal("10.00"))
 
     def test_placeholder_einzahlen(self):
         """TODO: Team B - Tests für einzahlen()"""
@@ -112,6 +151,13 @@ class TestSaldoFunktionen:
     Tests für Saldo-bezogene Funktionen
     TODO: Team B - Testet Saldo-Abfragen und -Berechnungen
     """
+    def test_gesamtsaldo_leer(self, service):
+        assert service.gesamtsaldo_berechnen() == Decimal("0.00")
+
+    def test_gesamtsaldo_mehrere(self, service):
+        service.konto_erstellen(Decimal("10.00"))
+        service.konto_erstellen(Decimal("20.00"))
+        assert service.gesamtsaldo_berechnen() == Decimal("30.00")
 
     def test_placeholder_gesamtsaldo(self):
         """TODO: Team B - Tests für gesamtsaldo()"""
@@ -122,6 +168,28 @@ class TestSaldoFunktionen:
         # - Korrekte Summe aller Salden
         assert True, "TODO: Tests für gesamtsaldo implementieren"
 
+class TestIntegration:
+    """
+    Integration tests for KontoService.
+
+    This test class verifies the complete workflow of the account management system,
+    ensuring that all components work together correctly.
+    """
+    def test_vollstaendiger_workflow(self, service):
+        # 1. Zwei Konten erstellen
+        id1 = service.konto_erstellen(Decimal("100.00"))
+        id2 = service.konto_erstellen(Decimal("50.00"))
+
+        # 2. Überweisung
+        service.ueberweisen(id1, id2, Decimal("25.00"))
+
+        # 3. Gesamtsaldo prüfen
+        assert service.gesamtsaldo_berechnen() == Decimal("150.00")
+
+        # 4. Konten prüfen
+        konten = {k["konto_id"]: k["saldo"] for k in service.konten_auflisten()}
+        assert konten[id1] == Decimal("75.00")
+        assert konten[id2] == Decimal("75.00")
 
 class TestUtilityFunktionen:
     """
