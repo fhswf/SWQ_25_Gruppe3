@@ -1,3 +1,4 @@
+# Implementiert von: FARN und DLWG
 """
 Test-Template für die Konto-Klasse (Test-After Approach)
 ========================================================
