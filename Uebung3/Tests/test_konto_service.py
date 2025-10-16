@@ -27,7 +27,7 @@ from ..Code.konto_service import KontoService
 from ..Code.konto import Konto
 
 @pytest.fixture
-def konto_service():
+def service():
     return KontoService()
 
 class TestKontoServiceErstellung:
@@ -35,9 +35,9 @@ class TestKontoServiceErstellung:
     Tests für KontoService-Erstellung und Setup
     TODO: Team B - Testet Service-Initialisierung
     """
-    def test_service_initialisierung(self, konto_service):
-        assert isinstance(konto_service, KontoService)
-        assert konto_service.konten_auflisten() == []
+    def test_service_initialisierung(self, service):
+        assert isinstance(service, KontoService)
+        assert service.konten_auflisten() == []
 
     def test_placeholder_service_erstellung(self):
         """

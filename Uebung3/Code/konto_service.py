@@ -6,6 +6,8 @@ TODO: Implementieren Sie die KontoService-Klasse basierend auf dem KontoServiceI
 
 from decimal import Decimal
 from typing import List, Dict
+
+from .konto import Konto
 from .interfaces import KontoServiceInterface, KontoInterface
 
 
@@ -68,7 +70,7 @@ class KontoService(KontoServiceInterface):
             def auszahlen(self, betrag: Decimal) -> None:
                 pass  # ← Macht nichts, wirft keine Fehler!
 
-        return DummyKonto(konto_id, saldo)
+        return Konto(konto_id, saldo)
 
         # TODO: Team B - Später ersetzen Sie die obige Dummy-Implementation durch:
         # return Konto(konto_id, saldo)
