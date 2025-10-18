@@ -43,15 +43,29 @@ class Konto(KontoInterface):
         Wandelt Konto-Objekt in seine String-Repräsentation um
 
         """
-        return super().__str__() + f" (ID: {self._konto_id}, Saldo: {self._saldo})"
+        return object.__str__(self) + f" (ID: {self._konto_id}, Saldo: {self._saldo})"
 
     def __repr__(self):
         """
         Wandelt Konto-Objekt in seine String-Repräsentation um
 
         """
-        return super().__repr__() + f" (ID: {self._konto_id}, Saldo: {self._saldo})"
+        return object.__repr__(self) + f" (ID: {self._konto_id}, Saldo: {self._saldo})"
 
+    def __eq__(self, other):
+        """
+        Vergleicht zwei Konto-Objekte auf Gleichheit
+
+        Args:
+            other(Konto): Zu vergleichendes Konto-Objekt
+
+        Return:
+            bool: True, wenn beide Konten gleich sind (ID und Saldo), sonst False
+        """
+        if not isinstance(other, Konto):
+            return False
+        return self._konto_id == other._konto_id and self._saldo == other._saldo
+    
     @property
     def konto_id(self) -> int:
         """
