@@ -16,6 +16,7 @@ Autorschaft dokumentieren: Wer hat welchen TDD-Schritt gemacht?
 """
 
 import pytest
+from ..Code.fizzbuzz_kata import fizzbuzz
 
 # TODO: Team A - Import nach erster Implementierung:
 # from Teil2_TDD_und_Mocking.aufgaben.fizzbuzz_kata import fizzbuzz
@@ -32,7 +33,7 @@ class TestFizzBuzzTDD:
     - Ein Test nach dem anderen!
     """
 
-    def test_placeholder_start_here(self):
+    def test_no_divisor(self):
         """
         TODO: Team A - Ersetzt diesen Placeholder durch euren ersten TDD-Test!
 
@@ -43,10 +44,23 @@ class TestFizzBuzzTDD:
         TDD-Autor: [Name und Zeit]
         """
         # TODO: Euer erster TDD-Test hier
-        assert True, "Placeholder - startet hier mit TDD!"
 
-        # Beispiel-Idee (entfernt nach eigenem Test):
-        # assert fizzbuzz(1) == "1"
+        assert fizzbuzz(1) == "1"
+
+    def test_divisible_by_3(self):
+        assert fizzbuzz(3) == "Fizz"
+
+    def test_divisible_by_5(self):
+        assert fizzbuzz(5) == "Buzz"
+
+    def test_divisible_by_3_and_5(self):
+        assert fizzbuzz(15) == "FizzBuzz"
+
+    def test_negative_number(self):
+        assert fizzbuzz(-3) == "Fizz"
+
+    def test_zero(self):
+        assert fizzbuzz(0) == "FizzBuzz"
 
 
 class TestFizzBuzzErweitert:
@@ -71,13 +85,25 @@ class TestFizzBuzzErweitert:
 """
 TDD-Fortschritt dokumentieren:
 
-Test 1: [Was getestet] - Autor: [Name] - Zeit: [Zeit]
-Implementation 1: [Minimale Lösung] - Zeit: [Zeit]
+Test 1: [FizzBuzz(1) == "1"] - Autor: [FARN] - Zeit: [10:35]
+Implementation 1: [return 1] : [10:36]
+Refactoring 1: [if n%3 != 0 and n%5 != 0: return str(n)] - Zeit: [10:37]
 
-Test 2: [Was getestet] - Autor: [Name] - Zeit: [Zeit]  
-Refactoring: [Was geändert] - Zeit: [Zeit]
+Test 2: [FizzBuzz(3) - Autor: [DLWG] - Zeit: [10:40]
+Implementation 1: [if n==3: return "Fizz"] : [10:42]
+Refactoring 1: [if n%3 == 0] - Zeit: [10:43]
 
-[Weiter dokumentieren...]
+Test 3: [FizzBuzz(5) - Autor: [FARN] - Zeit: [10:45]
+Implementation 1: [if n==5: return "Buzz"] : [10:46]
+Refactoring 1: [if n%5 == 0] - Zeit: [10:47]
+
+Test 4: [FizzBuzz(15) - Autor: [DLWG] - Zeit: [10:50]
+Implementation 1: [if n==15: return "FizzBuzz"] : [10:51]
+Refactoring 1: [if n%3==0 and n%5==0] - Zeit: [10:52]
+
+Refactoring gesamt - Autor [DLWG,FARN]: Kombinieren der Bedingungen für Fizz, Buzz und FizzBuzz in String-Konkatenation 
+Zeit: [10:55]
+
 
 Erkenntnisse:
 - Was war überraschend?

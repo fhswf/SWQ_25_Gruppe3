@@ -15,15 +15,24 @@ FizzBuzz Regeln:
 - Sonst -> Zahl als String
 """
 
+
 def fizzbuzz(n: int) -> str:
     """
     TODO: Implementieren Sie diese Funktion mit TDD
-    
+
     Args:
         n: Eine positive Ganzzahl
-        
+
     Returns:
         "Fizz", "Buzz", "FizzBuzz" oder die Zahl als String
     """
-    # TODO: Implementierung mit TDD
-    pass
+
+    ret_str = ""
+
+    if n % 3 == 0:
+        ret_str += "Fizz"
+    if n % 5 == 0:
+        ret_str += "Buzz"
+    if ret_str == "":
+        ret_str = str(n)
+    return ret_str
