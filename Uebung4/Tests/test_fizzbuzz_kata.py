@@ -56,29 +56,40 @@ class TestFizzBuzzTDD:
     def test_divisible_by_3_and_5(self):
         assert fizzbuzz(15) == "FizzBuzz"
 
-    def test_negative_number(self):
-        assert fizzbuzz(-3) == "Fizz"
-
-    def test_zero(self):
-        assert fizzbuzz(0) == "FizzBuzz"
-
 
 class TestFizzBuzzErweitert:
     """
     TODO: Team A - Erweiterte Tests, wenn Basis funktioniert
     """
 
-    def test_placeholder_extended_tests(self):
-        """
-        TODO: Team A - Entwickelt weitere Tests für FizzBuzz
+    def test_zero(self):
+        assert fizzbuzz(0) == "FizzBuzz"
 
-        Ideen:
-        - Mehrere Zahlen gleichzeitig testen
-        - Parametrisierte Tests (@pytest.mark.parametrize)
-        - Edge Cases (negative Zahlen, 0, große Zahlen)
-        """
-        # TODO: Erweiterte Tests hier
-        assert True, "TODO: Erweiterte FizzBuzz-Tests implementieren"
+    def test_negative_number_no_divisor(self):
+        assert fizzbuzz(-4) == "-4"
+        assert fizzbuzz(-7) == "-7"
+        assert fizzbuzz(-8) == "-8"
+
+    def test_negative_number_divisible_by_3(self):
+        assert fizzbuzz(-3) == "Fizz"
+        assert fizzbuzz(-6) == "Fizz"
+        assert fizzbuzz(-9) == "Fizz"
+
+    def test_negative_number_divisible_by_5(self):
+        assert fizzbuzz(-5) == "Buzz"
+        assert fizzbuzz(-10) == "Buzz"
+        assert fizzbuzz(-20) == "Buzz"
+
+    def test_negative_number_divisible_by_3_and_5(self):
+        assert fizzbuzz(-15) == "FizzBuzz"
+        assert fizzbuzz(-30) == "FizzBuzz"
+        assert fizzbuzz(-45) == "FizzBuzz"
+
+    def test_big_number(self):
+        assert fizzbuzz(999999) == "Fizz"
+        assert fizzbuzz(1000000) == "Buzz"
+        assert fizzbuzz(1500000) == "FizzBuzz"
+        assert fizzbuzz(1000001) == "1000001"
 
 
 # TODO: Team A - Optional: TDD-Protokoll
@@ -103,6 +114,7 @@ Refactoring 1: [if n%3==0 and n%5==0] - Zeit: [10:52]
 
 Refactoring gesamt - Autor [DLWG,FARN]: Kombinieren der Bedingungen für Fizz, Buzz und FizzBuzz in String-Konkatenation 
 Zeit: [10:55]
+
 
 
 Erkenntnisse:

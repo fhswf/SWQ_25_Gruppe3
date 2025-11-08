@@ -16,23 +16,30 @@ FizzBuzz Regeln:
 """
 
 
-def fizzbuzz(n: int) -> str:
+def fizzbuzz(first: int, *others: int) -> str | list[str]:
     """
-    TODO: Implementieren Sie diese Funktion mit TDD
+    Akzeptiert mindestens eine ganze Zahl und beliebig viele weitere.
+    Gibt für jede Zahl das entsprechende FizzBuzz-Ergebnis als Liste von Strings zurück.
 
     Args:
-        n: Eine positive Ganzzahl
+        first: Mindestens eine positive Ganzzahl
+        *others: Optionale weitere Ganzzahlen
 
     Returns:
-        "Fizz", "Buzz", "FizzBuzz" oder die Zahl als String
+        Liste von Strings mit "Fizz", "Buzz", "FizzBuzz" oder der Zahl als String
     """
+    def _single(n: int) -> str:
+        ret = ""
+        if n % 3 == 0:
+            ret += "Fizz"
+        if n % 5 == 0:
+            ret += "Buzz"
+        if ret == "":
+            return str(n)
+        else:
+            return ret
 
-    ret_str = ""
-
-    if n % 3 == 0:
-        ret_str += "Fizz"
-    if n % 5 == 0:
-        ret_str += "Buzz"
-    if ret_str == "":
-        ret_str = str(n)
-    return ret_str
+    if len(others) == 0:
+        return _single(first)
+    else:
+        return [_single(n) for n in (first, *others)]
