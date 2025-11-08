@@ -1,3 +1,4 @@
+# Implementiert von: RNSR und ANGE
 """
 TDD-Template für String Calculator Kata
 =======================================
@@ -17,13 +18,18 @@ TDD-Prozess: RED → GREEN → REFACTOR → wiederholen!
 Autorschaft dokumentieren: Wer hat welchen TDD-Schritt gemacht?
 """
 
+from dataclasses import dataclass
 import pytest
+import Uebung4.Code.string_calculator_kata
+
+add = Uebung4.Code.string_calculator_kata.add
 
 # TODO: Team B - Import nach erster Implementierung:
 # from Teil2_TDD_und_Mocking.aufgaben.string_calculator_kata import add
 
 
 class TestStringCalculatorTDD:
+
     """
     TODO: Team B - Entwickelt String Calculator mit TDD!
 
@@ -34,21 +40,44 @@ class TestStringCalculatorTDD:
     - Ein Test nach dem anderen!
     """
 
-    def test_placeholder_start_here(self):
-        """
-        TODO: Team B - Ersetzt diesen Placeholder durch euren ersten TDD-Test!
+    def test_add(self):
+        @dataclass
+        class TestCase:
+            name: str
+            input: str
+            expected: int
+            raises: Exception = None
+            msg: str = None
 
-        Ideen für den ersten Test:
-        - Was ist das einfachste Verhalten?
-        - add("") sollte was zurückgeben?
+        testCases = [
+            # TDD-Autor: [RNSR 10:41]
+            TestCase("Empty string returns 0", "", 0),
+            # TDD-Autor: [ANGE 10:51]
+            TestCase("Single number returns the number itself",
+                     "5", 5),
+            # TDD-Autor: [RNSR 10:55]
+            TestCase("Two numbers return their sum", "2,4", 6),
+            # TDD-Autor: [RNSR 11:05]
+            TestCase("Faulty input raises exception", "1,a", None,
+                     ValueError, "Invalid input"),
+            # TDD-Autor: [ANGE 11:11]
+            TestCase("New line as delimiter", "1\n6,2", 9),
+            # TDD-Autor: [ANGE 11:23]
+            TestCase("Negative numbers return ValueError and List of negatives",
+                     "-9", None, ValueError, "[-9]"),
+            # TDD-Autor: [RNSR 11:31]
+            TestCase("Ignoring numbers greater than 1000",   "1\n1001,2,3", 6),
+        ]
 
-        TDD-Autor: [Name und Zeit]
-        """
-        # TODO: Euer erster TDD-Test hier
-        assert True, "Placeholder - startet hier mit TDD!"
+        for tc in testCases:
+            if tc.raises:
+                with pytest.raises(tc.raises) as excinfo:
+                    add(tc.input)
+                assert tc.msg == str(excinfo.value)
 
-        # Beispiel-Idee (entfernt nach eigenem Test):
-        # assert add("") == 0
+            else:
+                result= add(tc.input)
+                assert result == tc.expected, f"Failed: {tc.name}"
 
 
 class TestStringCalculatorErweitert:
@@ -77,7 +106,7 @@ TDD-Fortschritt dokumentieren:
 Test 1: [Was getestet] - Autor: [Name] - Zeit: [Zeit]
 Implementation 1: [Minimale Lösung] - Zeit: [Zeit]
 
-Test 2: [Was getestet] - Autor: [Name] - Zeit: [Zeit]  
+Test 2: [Was getestet] - Autor: [Name] - Zeit: [Zeit]
 Refactoring: [Was geändert] - Zeit: [Zeit]
 
 [Weiter dokumentieren...]
