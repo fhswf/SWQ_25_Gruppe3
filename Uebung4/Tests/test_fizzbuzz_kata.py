@@ -19,7 +19,7 @@ import pytest
 from ..Code.fizzbuzz_kata import fizzbuzz
 
 # TODO: Team A - Import nach erster Implementierung:
-# from Teil2_TDD_und_Mocking.aufgaben.fizzbuzz_kata import fizzbuzz
+# from ..Code.fizzbuzz_kata import fizzbuzz
 
 
 class TestFizzBuzzTDD:

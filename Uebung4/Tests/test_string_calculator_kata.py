@@ -25,7 +25,7 @@ import Uebung4.Code.string_calculator_kata
 add = Uebung4.Code.string_calculator_kata.add
 
 # TODO: Team B - Import nach erster Implementierung:
-# from Teil2_TDD_und_Mocking.aufgaben.string_calculator_kata import add
+# from ..Code.string_calculator_kata import add
 
 
 class TestStringCalculatorTDD:
