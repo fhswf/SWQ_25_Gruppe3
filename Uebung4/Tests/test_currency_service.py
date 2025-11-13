@@ -25,7 +25,7 @@ import pytest
 from unittest.mock import patch
 
 # TODO: Team B - Import nach erster Implementierung:
-# from ..Code.currency_service import get_exchange_rate_assessment
+from ..Code.currency_service import get_exchange_rate_assessment
 
 
 class TestCurrencyService:
@@ -50,6 +50,22 @@ class TestCurrencyService:
         - Kurs 1.25 → "sehr günstig"
         """
         assert True, "TODO: Durch echte Tests ersetzen"
+
+    def test_fair_rate(self):
+        # TDD-Autor: [ANGE 19:19]
+        # TDD-Zyklus 1: RED von [ANGE]
+        # TDD-Zyklus 1: GREEN von []
+        # TDD-Zyklus 1: REFACTOR von [] & []
+        with patch('requests.get') as mock_get:
+        # Simuliere API-Response
+            mock_get.return_value.json.return_value = {"rate": 1.05}
+        
+            result = get_exchange_rate_assessment("EUR", "USD")
+            assert result == "fair"
+        
+            # Optional: Verifiziere API-Aufruf
+            mock_get.assert_called_once()
+
     
     # TODO: Team B - Beispiel für ersten echten Test:
     # def test_fair_rate(self):
