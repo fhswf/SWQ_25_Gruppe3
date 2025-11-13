@@ -119,19 +119,10 @@ class TestStringCalculatorErweitert:
 
 # TODO: Team B - Optional: TDD-Protokoll
 """
-TDD-Fortschritt dokumentieren:
-
-Test 1: [Was getestet] - Autor: [Name] - Zeit: [Zeit]
-Implementation 1: [Minimale Lösung] - Zeit: [Zeit]
-
-Test 2: [Was getestet] - Autor: [Name] - Zeit: [Zeit]
-Refactoring: [Was geändert] - Zeit: [Zeit]
-
-[Weiter dokumentieren...]
-
 Erkenntnisse:
-- Was war überraschend?
-- Wo musstet ihr refaktorieren?
-- Welche Tests brachten neue Herausforderungen?
-- Unterschiede zu FizzBuzz?
+- TDD half, den Code schrittweise und sicher zu entwickeln.
+- Man konnte durch klare Rollen (RED/GREEN/REFACTOR) effizient arbeiten.
+- Parsing mit verschiedenen Delimitern war die größte Herausforderung.
+- Refactoring nach jedem Test verbesserte Codequalität, aber verlangsamte den Prozess etwas.
+- Langsames iteratives Vorgehen schafft Vertrauen in den Code.
 """
