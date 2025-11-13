@@ -35,6 +35,8 @@ def get_exchange_rate_assessment(from_currency: str, to_currency: str) -> str:
         return "ungünstig"
      elif rate < 1.10:
         return "fair"
+     elif rate < 1.20:
+        return "günstig"
      
      
 
