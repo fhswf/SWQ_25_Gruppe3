@@ -19,7 +19,7 @@ Hinweise:
 import requests
 
 
-def get_weather_category(city: str) -> str | None:
+def get_weather_category(city: str) -> str:
     """
     Ruft Weather-API auf und gibt Temperatur-Kategorie zurück
 
@@ -56,4 +56,5 @@ def get_weather_category(city: str) -> str | None:
         return "angenehm"
     elif temperature <= 30:
         return "warm"
-    return "None"
+    else:
+        return "heiß"
