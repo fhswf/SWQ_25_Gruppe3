@@ -46,11 +46,11 @@ def get_weather_category(city: str) -> str:
     data = response.json()
     temperature = data.get("temperature")
 
-    
     if temperature < 0:
         return "frostgefahr"
     elif temperature <= 10:
         return "kalt"
+    elif temperature <= 15:
+        return "kühl"
     else:
         return "angenehm"
-    
