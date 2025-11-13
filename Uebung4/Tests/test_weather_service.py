@@ -34,17 +34,17 @@ from ..Code.weather_service import get_weather_category
 class TestWeatherService:
     """
     Tests für Weather-API Service
-    
+
     TDD-Vorgehen:
     1. Test schreiben (RED)
     2. Minimale Implementierung (GREEN)
     3. Refactoring
     """
-    
+
     def test_placeholder(self):
         """
         Placeholder - ersetzt durch echte Tests!
-        
+
         Beispiel-Tests:
         - Temperatur 20°C → "angenehm"
         - Temperatur -5°C → "frostgefahr"
@@ -54,18 +54,29 @@ class TestWeatherService:
         - Temperatur 35°C → "heiß"
         """
         assert True, "TODO: Durch echte Tests ersetzen"
-    
+
     # TODO: Team A - Beispiel für ersten echten Test:
     def test_angenehm(self):
         """TDD-Zyklus 1: RED von [DLWG] um [18:15]"""
         with patch('requests.get') as mock_get:
             # Simuliere API-Response
             mock_get.return_value.json.return_value = {"temperature": 20}
-             
+
             result = get_weather_category("Berlin")
             assert result == "angenehm"
-             
+
             # Optional: Verifiziere API-Aufruf
             mock_get.assert_called_once()
-    
+
+    def test_frostgefahr(self):
+        """TDD-Zyklus 2: RED von [FARN] um [18:45]"""
+        with patch('requests.get') as mock_get:
+            # Simuliere API-Response
+            mock_get.return_value.json.return_value = {"temperature": -5}
+
+            result = get_weather_category("München")
+            assert result == "frostgefahr"
+
+            # Optional: Verifiziere API-Aufruf
+            mock_get.assert_called_once()
     # TODO: Team A - Weitere Tests für alle Temperaturkategorien hinzufügen!
