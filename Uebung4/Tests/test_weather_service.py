@@ -24,6 +24,8 @@ Dokumentiert eure Autorschaft: Wer hat welchen TDD-Schritt gemacht?
 
 import pytest
 from unittest.mock import patch
+import requests
+from ..Code.weather_service import get_weather_category
 
 # TODO: Team A - Import nach erster Implementierung:
 # from ..Code.weather_service import get_weather_category
@@ -54,16 +56,16 @@ class TestWeatherService:
         assert True, "TODO: Durch echte Tests ersetzen"
     
     # TODO: Team A - Beispiel für ersten echten Test:
-    # def test_angenehm(self):
-    #     """TDD-Zyklus 1: RED von [Name] um [Zeit]"""
-    #     with patch('requests.get') as mock_get:
-    #         # Simuliere API-Response
-    #         mock_get.return_value.json.return_value = {"temperature": 20}
-    #         
-    #         result = get_weather_category("Berlin")
-    #         assert result == "angenehm"
-    #         
-    #         # Optional: Verifiziere API-Aufruf
-    #         mock_get.assert_called_once()
+    def test_angenehm(self):
+        """TDD-Zyklus 1: RED von [DLWG] um [18:15]"""
+        with patch('requests.get') as mock_get:
+            # Simuliere API-Response
+            mock_get.return_value.json.return_value = {"temperature": 20}
+             
+            result = get_weather_category("Berlin")
+            assert result == "angenehm"
+             
+            # Optional: Verifiziere API-Aufruf
+            mock_get.assert_called_once()
     
     # TODO: Team A - Weitere Tests für alle Temperaturkategorien hinzufügen!

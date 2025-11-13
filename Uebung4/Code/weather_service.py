@@ -45,4 +45,6 @@ def get_weather_category(city: str) -> str:
     # response.raise_for_status()
     # data = response.json()
     # temperature = data.get("temperature")
-    pass
+    
+    requests.get("https://api.weather.com/current?city={city}", timeout=5)
+    return "angenehm"
