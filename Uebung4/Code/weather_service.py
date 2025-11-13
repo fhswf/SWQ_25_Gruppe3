@@ -56,4 +56,4 @@ def get_weather_category(city: str) -> str | None:
         return "angenehm"
     elif temperature <= 30:
         return "warm"
-    return None
+    return "None"
