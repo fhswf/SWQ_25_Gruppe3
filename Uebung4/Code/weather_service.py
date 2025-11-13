@@ -48,6 +48,6 @@ def get_weather_category(city: str) -> str:
 
     if temperature in range(16, 25):
         return "angenehm"
-    else:
+    elif temperature < 0:
         return "frostgefahr"
     return None  # Platzhalter
