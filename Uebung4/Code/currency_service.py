@@ -29,8 +29,12 @@ def get_exchange_rate_assessment(from_currency: str, to_currency: str) -> str:
      data = response.json()
      rate = data.get("rate")
 
+     if rate < 0.90:
+        return "sehr ungünstig"
      if rate < 1.10:
         return "fair"
+     
+     
 
 
 """
