@@ -54,8 +54,8 @@ class TestCurrencyService:
     def test_fair_rate(self):
         # TDD-Autor: [ANGE 19:19]
         # TDD-Zyklus 1: RED von [ANGE]
-        # TDD-Zyklus 1: GREEN von []
-        # TDD-Zyklus 1: REFACTOR von [] & []
+        # TDD-Zyklus 1: GREEN von [RNSR]
+        # TDD-Zyklus 1: REFACTOR von [ANGE] & [RNSR]
         with patch('requests.get') as mock_get:
         # Simuliere API-Response
             mock_get.return_value.json.return_value = {"rate": 1.05}
@@ -65,7 +65,21 @@ class TestCurrencyService:
         
             # Optional: Verifiziere API-Aufruf
             mock_get.assert_called_once()
-
+    
+    def test_very_unfavorable_rate(self):
+        # TDD-Autor: [RNSR 19:25]
+        # TDD-Zyklus 2: RED von [RNSR]
+        # TDD-Zyklus 2: GREEN von []
+        # TDD-Zyklus 2: REFACTOR von [] & []
+        with patch('requests.get') as mock_get:
+        # Simuliere API-Response
+            mock_get.return_value.json.return_value = {"rate": 0.85}
+        
+            result = get_exchange_rate_assessment("EUR", "USD")
+            assert result == "sehr ungünstig"
+        
+            # Optional: Verifiziere API-Aufruf
+            mock_get.assert_called_once()
     
     # TODO: Team B - Beispiel für ersten echten Test:
     # def test_fair_rate(self):
