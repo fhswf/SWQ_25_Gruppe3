@@ -91,4 +91,16 @@ class TestWeatherService:
 
             # Optional: Verifiziere API-Aufruf
             mock_get.assert_called_once()
+
+    def test_kühl(self):
+        """TDD-Zyklus 4: RED von [FARN] um [19:23]"""
+        with patch('requests.get') as mock_get:
+            # Simuliere API-Response
+            mock_get.return_value.json.return_value = {"temperature": 13}
+
+            result = get_weather_category("Oldenburg")
+            assert result == "kühl"
+
+            # Optional: Verifiziere API-Aufruf
+            mock_get.assert_called_once()
     # TODO: Team A - Weitere Tests für alle Temperaturkategorien hinzufügen!
