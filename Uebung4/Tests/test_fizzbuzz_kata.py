@@ -91,6 +91,11 @@ class TestFizzBuzzErweitert:
         assert fizzbuzz(1500000) == "FizzBuzz"
         assert fizzbuzz(1000001) == "1000001"
 
+    def test_multiple_numbers(self):
+        assert fizzbuzz(1, 2, 3, 4, 5, 15) == ["1", "2", "Fizz", "4", "Buzz", "FizzBuzz"]
+        assert fizzbuzz(6, 10, 30, 7) == ["Fizz", "Buzz", "FizzBuzz", "7"]
+        assert fizzbuzz(-3, -5, -15, -4) == ["Fizz", "Buzz", "FizzBuzz", "-4"]
+
 
 # TODO: Team A - Optional: TDD-Protokoll
 """
@@ -119,6 +124,9 @@ Zeit: [10:55]
 
 Erkenntnisse:
 - Was war überraschend?
+    - Antwort: Wie kleinschrittig der TDD-Prozess ist und wie oft man refaktorieren muss.
 - Wo musstet ihr refaktorieren?
+    - Antwort: Initiale Implementierungen waren sehr spezifisch, mussten aber verallgemeinert werden.
 - Welche Tests brachten neue Herausforderungen?
+    - Antwort: Tests mit negativen Zahlen und mehreren Eingabewerten.
 """
