@@ -40,44 +40,38 @@ class TestStringCalculatorTDD:
     - Ein Test nach dem anderen!
     """
 
-    def test_add(self):
-        @dataclass
-        class TestCase:
-            name: str
-            input: str
-            expected: int
-            raises: Exception = None
-            msg: str = None
+    def test_add_empty_string_returns_zero(self):
+        # TDD-Autor: [RNSR 10:41]
+        # TDD-Zyklus 1: RED von [RNSR]
+        # TDD-Zyklus 1: GREEN von [ANGE]
+        # TDD-Zyklus 1: REFACTOR von [RNSR] & [ANGE]
+        result = add("")
+        assert result == 0, "Empty string should return 0"
 
-        testCases = [
-            # TDD-Autor: [RNSR 10:41]
-            TestCase("Empty string returns 0", "", 0),
-            # TDD-Autor: [ANGE 10:51]
-            TestCase("Single number returns the number itself",
-                     "5", 5),
-            # TDD-Autor: [RNSR 10:55]
-            TestCase("Two numbers return their sum", "2,4", 6),
-            # TDD-Autor: [RNSR 11:05]
-            TestCase("Faulty input raises exception", "1,a", None,
-                     ValueError, "Invalid input"),
-            # TDD-Autor: [ANGE 11:11]
-            TestCase("New line as delimiter", "1\n6,2", 9),
-            # TDD-Autor: [ANGE 11:23]
-            TestCase("Negative numbers return ValueError and List of negatives",
-                     "-9", None, ValueError, "[-9]"),
-            # TDD-Autor: [RNSR 11:31]
-            TestCase("Ignoring numbers greater than 1000",   "1\n1001,2,3", 6),
-        ]
+    def test_add_single_number_returns_number(self):
+        # TDD-Autor: [ANGE 10:51]
+        # TDD-Zyklus 1: RED von [ANGE]
+        # TDD-Zyklus 1: GREEN von [RNSR]
+        # TDD-Zyklus 1: REFACTOR von [RNSR] & [ANGE]
+        result = add("5")
+        assert result == 5, "Single digit number should return itself"
 
-        for tc in testCases:
-            if tc.raises:
-                with pytest.raises(tc.raises) as excinfo:
-                    add(tc.input)
-                assert tc.msg == str(excinfo.value)
+    def test_add_two_single_digit_numbers(self):
+        # TDD-Autor: [RNSR 10:55]
+        # TDD-Zyklus 1: RED von [RNSR]
+        # TDD-Zyklus 1: GREEN von [ANGE]
+        # TDD-Zyklus 1: REFACTOR von [RNSR] & [ANGE]
+        result = add("2,4")
+        assert result == 6, "Two single digit numbers should return their sum"
 
-            else:
-                result= add(tc.input)
-                assert result == tc.expected, f"Failed: {tc.name}"
+    def test_add_function_non_numeric_input(self):
+        # TDD-Autor: [ANGE 11:05]
+        # TDD-Zyklus 1: RED von [ANGE]
+        # TDD-Zyklus 1: GREEN von [RNSR]
+        # TDD-Zyklus 1: REFACTOR von [RNSR] & [ANGE]
+        with pytest.raises(ValueError) as excinfo:
+            add("1,a")
+        assert str(excinfo.value) == "Invalid input", "Invalid input should raise ValueError"
 
 
 class TestStringCalculatorErweitert:
@@ -98,6 +92,30 @@ class TestStringCalculatorErweitert:
         # TODO: Erweiterte Tests hier
         assert True, "TODO: Erweiterte String Calculator-Tests implementieren"
 
+    def test_newline_delimiter(self):
+        # TDD-Autor: [RNSR 11:11]
+        # TDD-Zyklus 1: RED von [RNSR]
+        # TDD-Zyklus 1: GREEN von [ANGE]
+        # TDD-Zyklus 1: REFACTOR von [RNSR] & [ANGE]
+        result = add("1\n6,2")
+        assert result == 9, "New line as delimiter should be supported"
+
+    def test_ignore_numbers_greater_than_1000(self):
+        # TDD-Autor: [RNSR 11:31]
+        # TDD-Zyklus 1: RED von [RNSR]
+        # TDD-Zyklus 1: GREEN von [ANGE]
+        # TDD-Zyklus 1: REFACTOR von [RNSR] & [ANGE]
+        result = add("2,1001,3")
+        assert result == 5, "Numbers greater than 1000 should be ignored"
+
+    def test_negative_number_raises_exception(self):
+        # TDD-Autor: [ANGE 11:23]
+        # TDD-Zyklus 1: RED von [ANGE]
+        # TDD-Zyklus 1: GREEN von [RNSR]
+        # TDD-Zyklus 1: REFACTOR von [RNSR] & [ANGE]
+        with pytest.raises(ValueError) as excinfo:
+            add("4,-5,6")
+        assert str(excinfo.value) == "[-5]", "Negative numbers should raise ValueError with list of negatives"
 
 # TODO: Team B - Optional: TDD-Protokoll
 """
