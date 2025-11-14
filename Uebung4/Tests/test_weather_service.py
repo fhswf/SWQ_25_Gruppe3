@@ -20,6 +20,12 @@ Temperatur-Kategorien:
 TDD-Prozess: RED → GREEN → REFACTOR → wiederholen!
 
 Dokumentiert eure Autorschaft: Wer hat welchen TDD-Schritt gemacht?
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ACHTUNG:                                                                                 !!
+Autorenschaft und TDD-Zyklen sind in den Commit Messages kleinschrittig dokumentiert.    !!
+In der "Blame" Ansicht in GitHub gut zu sehen.                                           !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 """
 
 import pytest
