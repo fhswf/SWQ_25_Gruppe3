@@ -1,9 +1,6 @@
 {
     "image": "mcr.microsoft.com/devcontainers/python:3.11",
     "features": {
-        "ghcr.io/devcontainers/features/node:1": {
-            "version": "18"
-        },
         "ghcr.io/devcontainers/features/docker-in-docker:2": {
             "moby": false
         }
@@ -15,20 +12,10 @@
                 "ms-python.pylint",
                 "ms-python.black-formatter",
                 "ms-python.mypy-type-checker",
-                "ms-toolsai.jupyter",
-                "angular.ng-template",
-                "ms-vscode.vscode-typescript-next",
-                "bradlc.vscode-tailwindcss",
-                "esbenp.prettier-vscode",
-                "ms-playwright.playwright",
-                "ms-vscode.test-adapter-converter",
                 "hbenl.vscode-test-explorer",
-                "ms-vscode.vscode-json",
                 "streetsidesoftware.code-spell-checker",
-                "ms-vscode.vscode-typescript-next",
-                "johnpapa.angular2",
-                "cyrilletuzi.angular-schematics",
-                "ms-vscode.makefile-tools"
+                "ms-vscode.vscode-json",
+                "ms-playwright.playwright"
             ],
             "extensionsToDisable": [
                 "github.copilot",
@@ -59,23 +46,11 @@
                 "editor.formatOnSave": true,
                 "editor.codeActionsOnSave": {
                     "source.organizeImports": "explicit"
-                },
-                "[typescript]": {
-                    "editor.defaultFormatter": "vscode.typescript-language-features"
-                },
-                "[javascript]": {
-                    "editor.defaultFormatter": "vscode.typescript-language-features"
-                },
-                "[html]": {
-                    "editor.defaultFormatter": "vscode.html-language-features"
-                },
-                "[scss]": {
-                    "editor.defaultFormatter": "vscode.css-language-features"
                 }
             }
         }
     },
-    "postCreateCommand": "pip install fastapi==0.104.1 uvicorn[standard]==0.24.0 peewee==3.17.0 pydantic==2.5.0 pytest==7.4.3 pytest-cov==4.1.0 pytest-mock==3.12.0 pytest-asyncio==0.21.1 mypy==1.7.1 pylint==3.0.3 black==23.11.0 flake8==6.1.0 bandit==1.7.5 isort==5.12.0 python-dotenv==1.0.0 httpx==0.25.2 python-multipart==0.0.6 requests==2.31.0 && npm install -g @angular/cli@17",
-    "forwardPorts": [8000, 4200, 8080],
+    "postCreateCommand": "pip install pytest==7.4.3 pytest-cov==4.1.0 pytest-mock==3.12.0 pytest-asyncio==0.21.1 mypy==1.7.1 pylint==3.0.3 black==23.11.0 flake8==6.1.0 bandit==1.7.5 isort==5.12.0 requests==2.31.0",
+    "forwardPorts": [],
     "remoteUser": "vscode"
 }
