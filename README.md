@@ -21,6 +21,7 @@ Die Aufgaben und Materialien zu den Übungsblättern finden Sie in den jeweilige
 - [Übung 3](./Uebung3/README.md)
 - [Übung 4](./Uebung4/README.md)
 - [Übung 5](./Uebung5/README.md)
+- [Übung 6](./Uebung6/README.md)
 
 
 ## Anleitungen
