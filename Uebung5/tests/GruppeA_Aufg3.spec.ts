@@ -1,6 +1,7 @@
+// Autor: FARN
 import { expect, test } from '@playwright/test';
 
-test.describe('GruppeA_Aufg3 Filter und Counter', () => {
+test.describe('Aufgabe 3', () => {
   const baseUrl = 'https://demo.playwright.dev/todomvc/#/';
 
   test.beforeEach(async ({ page }) => {
@@ -17,7 +18,7 @@ test.describe('GruppeA_Aufg3 Filter und Counter', () => {
     }
   });
 
-  test('Filter "All", "Active", "Completed" zeigen die richtigen Todos und Counter ist korrekt', async ({ page }) => {
+  test('Filter "All", "Active", "Completed" zeigen die richtigen Todos an und Counter ist korrekt', async ({ page }) => {
     // Drei Todos anlegen
     const todos = ['Wäsche waschen', 'Spülen', 'Mama besuchen'];
     for (const todoText of todos) {

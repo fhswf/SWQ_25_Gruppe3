@@ -1,4 +1,4 @@
-// Autoren: FARN und DLWG
+// Autor: FARN
 import { test, expect, type Page } from '@playwright/test';
 
 // Konstanten für die Testdaten und Locators
@@ -35,9 +35,9 @@ test.beforeEach(async ({ page }) => {
 
 // -------------------------------------------------------------------
 
-test.describe('TodoMVC Tests in Deutsch', () => {
+test.describe('Aufgabe 2', () => {
 
-    test('Szenario: Todos hinzufügen, löschen, markieren und löschen', async ({ page }) => {
+    test('Todos hinzufügen, löschen, markieren und löschen', async ({ page }) => {
         const { LAUNDRY, DISHES, GYM, MOM_VISIT } = TODO_ITEMS;
         
         const todoList = page.locator('.todo-list');
