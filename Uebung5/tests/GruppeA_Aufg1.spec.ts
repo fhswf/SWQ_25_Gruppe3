@@ -13,7 +13,7 @@ async function addTodo(page: Page, text: string) {
 test.describe.serial('ToDo Test - Aufgabe 1', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(TODO_URL);
-    // Alle bestehenden Todos löschen, auch bei verzögertem Entfernen
+    // Alle bestehenden Todos löschen
     while (await page.locator('.todo-list li').count() > 0) {
       const todoCount = await page.locator('.todo-list li').count();
       for (let i = 0; i < todoCount; i++) {
@@ -40,13 +40,16 @@ test.describe.serial('ToDo Test - Aufgabe 1', () => {
   });
 
   test('Zweites ToDo ge-toggelt', async ({ page }) => {
+    await addTodo(page, 'Wäsche waschen');
+    await addTodo(page, 'Spülen');
     const spuelenCheckbox = page.getByRole('listitem').filter({ hasText: 'Spülen' }).getByLabel('Toggle Todo');
     await spuelenCheckbox.check();
     await expect(spuelenCheckbox).toBeChecked();
   });
 
   test('"Mark all as complete"', async ({ page }) => {
-    // Assume previous todos exist
+    await addTodo(page, 'Wäsche waschen');
+    await addTodo(page, 'Spülen');
     await page.getByText('Mark all as complete').click();
     const waescheCheckbox = page.getByRole('listitem').filter({ hasText: 'Wäsche waschen' }).getByLabel('Toggle Todo');
     const spuelenCheckbox = page.getByRole('listitem').filter({ hasText: 'Spülen' }).getByLabel('Toggle Todo');
@@ -55,7 +58,9 @@ test.describe.serial('ToDo Test - Aufgabe 1', () => {
   });
 
   test('Prüfe übrige ToDos', async ({ page }) => {
-    // Assume all todos are completed
+    await addTodo(page, 'Wäsche waschen');
+    await addTodo(page, 'Spülen');
+    await page.getByText('Mark all as complete').click();
     await expect(page.locator('body')).toContainText('0 items leftAll Active CompletedClear completed');
   });
 });
