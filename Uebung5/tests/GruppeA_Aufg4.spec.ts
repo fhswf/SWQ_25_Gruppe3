@@ -1,27 +1,32 @@
-import { expect, test } from '@playwright/test';
+// Autor: DLWG
 
-test.describe('GruppeA_Aufg4 Edge Cases', () => {
-    const baseUrl = 'https://demo.playwright.dev/todomvc/#/';
+import { expect, Page, test } from '@playwright/test';
 
+const TODO_URL = 'https://demo.playwright.dev/todomvc/#/';
+const TODO_INPUT_SELECTOR = '.new-todo';
+
+async function addTodo(page: Page, text: string) {
+    await page.locator(TODO_INPUT_SELECTOR).fill(text);
+    await page.keyboard.press('Enter');
+}
+
+test.describe.serial('ToDo Test - Aufgabe 4', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto(baseUrl);
+        await page.goto(TODO_URL);
         // Alle bestehenden Todos löschen, auch bei verzögertem Entfernen
-        // Wiederhole, bis keine Todos mehr vorhanden sind
         while (await page.locator('.todo-list li').count() > 0) {
             const todoCount = await page.locator('.todo-list li').count();
             for (let i = 0; i < todoCount; i++) {
                 const todo = page.locator('.todo-list li').nth(0);
-                // .destroy-Button per Hover sichtbar machen und klicken
                 await todo.hover();
                 await todo.locator('.destroy').click({ force: true });
-                // Warte, bis das Element entfernt wurde
                 await expect(todo).toBeHidden();
             }
         }
     });
 
     test('Leere Eingabe (Enter ohne Text) erzeugt kein Todo', async ({ page }) => {
-        await page.locator('.new-todo').focus();
+        await page.locator(TODO_INPUT_SELECTOR).focus();
         await page.keyboard.press('Enter');
         const todoCount = await page.locator('.todo-list li').count();
         expect(todoCount).toBe(0);
@@ -29,8 +34,7 @@ test.describe('GruppeA_Aufg4 Edge Cases', () => {
 
     test('Sehr langer Text wird als Todo hinzugefügt', async ({ page }) => {
         const longText = 'a'.repeat(1000);
-        await page.locator('.new-todo').fill(longText);
-        await page.keyboard.press('Enter');
+        await addTodo(page, longText);
         const todo = page.locator('.todo-list li label');
         await expect(todo).toHaveText(longText);
     });

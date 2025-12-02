@@ -1,46 +1,61 @@
-// Autoren: FARN und DLWG
+// Autor: DLWG
 
-import { test, expect, Page } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 
 const TODO_URL = 'https://demo.playwright.dev/todomvc/#/';
-const TODO_INPUT_NAME = 'What needs to be done?';
+const TODO_INPUT_SELECTOR = '.new-todo';
 
 async function addTodo(page: Page, text: string) {
-  const input = page.getByRole('textbox', { name: TODO_INPUT_NAME });
-  await input.click();
-  await input.fill(text);
-  await input.press('Enter');
+  await page.locator(TODO_INPUT_SELECTOR).fill(text);
+  await page.keyboard.press('Enter');
 }
 
-test.describe('TodoMVC', () => {
-  test('should add, toggle, and complete todos', async ({ page }) => {
+test.describe.serial('ToDo Test - Aufgabe 1', () => {
+  test.beforeEach(async ({ page }) => {
     await page.goto(TODO_URL);
+    // Alle bestehenden Todos löschen, auch bei verzögertem Entfernen
+    while (await page.locator('.todo-list li').count() > 0) {
+      const todoCount = await page.locator('.todo-list li').count();
+      for (let i = 0; i < todoCount; i++) {
+        const todo = page.locator('.todo-list li').nth(0);
+        await todo.hover();
+        await todo.locator('.destroy').click({ force: true });
+        await expect(todo).toBeHidden();
+      }
+    }
+  });
 
-    // Add first todo
-    await expect(page.getByRole('textbox', { name: TODO_INPUT_NAME })).toBeVisible();
+  test('Eins & mehrere ToDos hinzufügen', async ({ page }) => {
+    await expect(page.locator(TODO_INPUT_SELECTOR)).toBeVisible();
     await addTodo(page, 'Wäsche waschen');
     await expect(page.getByTestId('todo-title')).toBeVisible();
     await expect(page.getByTestId('todo-title')).toContainText('Wäsche waschen');
     await expect(page.getByRole('checkbox', { name: 'Toggle Todo' })).not.toBeChecked();
 
-    // Add second todo
     await addTodo(page, 'Spülen');
     await expect(page.getByText('Spülen')).toBeVisible();
     const spuelenCheckbox = page.getByRole('listitem').filter({ hasText: 'Spülen' }).getByLabel('Toggle Todo');
     await expect(spuelenCheckbox).toBeVisible();
     await expect(spuelenCheckbox).not.toBeChecked();
+  });
 
-    // Toggle second todo
+  test('Zweites ToDo ge-toggelt', async ({ page }) => {
+    const spuelenCheckbox = page.getByRole('listitem').filter({ hasText: 'Spülen' }).getByLabel('Toggle Todo');
     await spuelenCheckbox.check();
     await expect(spuelenCheckbox).toBeChecked();
+  });
 
-    // Mark all as complete
+  test('"Mark all as complete"', async ({ page }) => {
+    // Assume previous todos exist
     await page.getByText('Mark all as complete').click();
     const waescheCheckbox = page.getByRole('listitem').filter({ hasText: 'Wäsche waschen' }).getByLabel('Toggle Todo');
+    const spuelenCheckbox = page.getByRole('listitem').filter({ hasText: 'Spülen' }).getByLabel('Toggle Todo');
     await expect(waescheCheckbox).toBeChecked();
     await expect(spuelenCheckbox).toBeChecked();
+  });
 
-    // Check summary text
+  test('Prüfe übrige ToDos', async ({ page }) => {
+    // Assume all todos are completed
     await expect(page.locator('body')).toContainText('0 items leftAll Active CompletedClear completed');
   });
 });
