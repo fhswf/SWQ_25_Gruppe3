@@ -1,3 +1,5 @@
+# Autoren: FARN und DLWG
+
 """
 Implementierung: Weather-API Service
 ====================================
