@@ -1,3 +1,5 @@
+#Autoren: FARN und DLWG
+
 """
 TDD-Template für Weather-API Service
 ====================================
