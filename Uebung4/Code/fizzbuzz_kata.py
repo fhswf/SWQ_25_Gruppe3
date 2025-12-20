@@ -1,3 +1,5 @@
+#Autoren: FARN und DLWG
+
 """
 TDD Kata: FizzBuzz
 Implementieren Sie die FizzBuzz-Funktion mit Test-Driven Development
